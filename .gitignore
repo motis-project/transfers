@@ -13,4 +13,5 @@ CMakeSettings.json
 *.zip
 /deps
 /.clang-tidy
+.pkg.lock
 .pkg.mutex
