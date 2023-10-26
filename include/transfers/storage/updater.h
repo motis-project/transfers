@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cstddef>
+#include <filesystem>
+
 #include "transfers/storage/storage.h"
 
 #include "nigiri/timetable.h"
@@ -11,6 +14,11 @@ enum class routing_type { kNoRouting, kPartialRouting, kFullRouting };
 
 struct storage_updater {
   explicit storage_updater(storage storage) : storage_(std::move(storage)) {}
+  storage_updater(std::filesystem::path const& db_file_path,
+                  std::size_t const db_max_size, ::nigiri::timetable& tt)
+      : storage_(db_file_path, db_max_size, tt) {
+    storage_.initialize();
+  }
 
   // Returns the current timetable version from storage.
   ::nigiri::timetable get_timetable() const { return storage_.tt_; };
