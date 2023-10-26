@@ -70,11 +70,11 @@ struct storage {
 
   // Adds new platforms to the database. Previously unknown platforms are added
   // to the `update_state_` state struct. Deletes old `update_state_` platforms.
-  void add_new_platforms(platforms&);
+  void add_new_platforms(platforms);
 
   // Adds new matching results to the database. Previously unknown matches are
   // added to the `update_state_` state struct.
-  void add_new_matching_results(matching_results const&);
+  void add_new_matching_results(matching_results const);
 
   // Adds new transfer requests keys to the database. Previously unknown
   // transfer requests keys are added to the `update_state_` state struct.
@@ -82,14 +82,14 @@ struct storage {
   // (described by the given transfer_request_keys is added to the
   // `update_state_` state struct.
   // Update merges the old transfer request keys with the new one.
-  void add_new_transfer_requests_keys(transfer_requests_keys const&);
+  void add_new_transfer_requests_keys(transfer_requests_keys const);
 
   // Adds new transfer results to the database. Previously unknown transfer
   // results are added to the `update_state_` state struct. Previously known
   // transfer results are updated. The difference (described in the transfer
   // result struct is added to the `update_state_` struct.
   // Update merges the old transfer result with the new one.
-  void add_new_transfer_results(transfer_results const&);
+  void add_new_transfer_results(transfer_results const);
 
   ::nigiri::timetable& tt_;
 
@@ -98,6 +98,13 @@ struct storage {
   hash_map<profile_key_t, ::ppr::routing::search_profile>
       profile_key_to_search_profile_;
   set<profile_key_t> used_profiles_;
+
+  std::filesystem::path osm_path_;
+  std::filesystem::path ppr_rg_path_;
+  std::filesystem::path nigiri_dump_path_;
+
+  double max_matching_dist_{400};
+  double max_bus_stop_matching_dist_{120};
 
 private:
   // Loads all transfers data from the database and stores it in the

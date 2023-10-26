@@ -75,7 +75,7 @@ void storage::add_new_profiles(std::vector<string> const& profile_names) {
   profile_key_to_profile_name_ = db_.get_profile_key_to_name();
 }
 
-void storage::add_new_platforms(platforms& pfs) {
+void storage::add_new_platforms(platforms pfs) {
   auto const added_to_db = db_.put_platforms(pfs);
   auto new_pfs = utl::all(added_to_db) |
                  utl::transform([&pfs](auto const i) { return pfs[i]; }) |
@@ -86,7 +86,7 @@ void storage::add_new_platforms(platforms& pfs) {
   update_state_.set_pfs_idx_ = true;
 }
 
-void storage::add_new_matching_results(matching_results const& mrs) {
+void storage::add_new_matching_results(matching_results const mrs) {
   auto const added_to_db = db_.put_matching_results(mrs);
   auto const new_mrs = utl::all(added_to_db) |
                        utl::transform([&mrs](auto const i) { return mrs[i]; }) |
@@ -106,7 +106,7 @@ void storage::add_new_matching_results(matching_results const& mrs) {
 }
 
 void storage::add_new_transfer_requests_keys(
-    transfer_requests_keys const& treqs_k) {
+    transfer_requests_keys const treqs_k) {
   auto const updated_in_db = db_.update_transfer_requests_keys(treqs_k);
   auto const added_to_db = db_.put_transfer_requests_keys(treqs_k);
 
@@ -126,7 +126,7 @@ void storage::add_new_transfer_requests_keys(
   update_state_.transfer_requests_keys_ = result;
 }
 
-void storage::add_new_transfer_results(transfer_results const& tres) {
+void storage::add_new_transfer_results(transfer_results const tres) {
   auto const updated_in_db = db_.update_transfer_results(tres);
   auto const added_to_db = db_.put_transfer_results(tres);
 
