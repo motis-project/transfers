@@ -27,7 +27,7 @@ void storage_updater::full_update() {
   generate_and_store_transfer_results(data_request_type::kPartialUpdate);
 
   // 5th: update timetable
-  storage_.update_tt(storage_.nigiri_dump_path_);
+  storage_.update_tt(nigiri_dump_path_);
 }
 
 void storage_updater::partial_update(transfers::first_update const first,
@@ -68,18 +68,18 @@ void storage_updater::partial_update(transfers::first_update const first,
   }
 
   // 5th: update timetable
-  storage_.update_tt(storage_.nigiri_dump_path_);
+  storage_.update_tt(nigiri_dump_path_);
 }
 
 void storage_updater::extract_and_store_osm_platforms() {
   storage_.add_new_platforms(
-      std::move(extract_platforms_from_osm_file(storage_.osm_path_)));
+      std::move(extract_platforms_from_osm_file(osm_path_)));
 }
 
 void storage_updater::match_and_store_matches_by_distance() {
-  auto matcher = distance_matcher(
-      storage_.get_matching_data(),
-      {storage_.max_matching_dist_, storage_.max_bus_stop_matching_dist_});
+  auto matcher =
+      distance_matcher(storage_.get_matching_data(),
+                       {max_matching_dist_, max_bus_stop_matching_dist_});
   storage_.add_new_matching_results(std::move(matcher.matching()));
 }
 
@@ -94,7 +94,7 @@ void storage_updater::generate_and_store_transfer_requests(
 void storage_updater::generate_and_store_transfer_results(
     data_request_type const request_type) {
   p::routing_graph rg;
-  ps::read_routing_graph(rg, storage_.ppr_rg_path_);
+  ps::read_routing_graph(rg, ppr_rg_path_);
 
   auto treqs =
       to_transfer_requests(storage_.get_transfer_requests_keys(request_type),

@@ -99,13 +99,6 @@ struct storage {
       profile_key_to_search_profile_;
   set<profile_key_t> used_profiles_;
 
-  std::filesystem::path osm_path_;
-  std::filesystem::path ppr_rg_path_;
-  std::filesystem::path nigiri_dump_path_;
-
-  double max_matching_dist_{400};
-  double max_bus_stop_matching_dist_{120};
-
 private:
   // Loads all transfers data from the database and stores it in the
   // `old_state_` state struct.
