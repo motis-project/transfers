@@ -27,6 +27,8 @@ struct storage_updater {
   // application of the transfer calculation.
   void partial_update(first_update const, routing_type const);
 
+  storage storage_;
+
 private:
   // Extracts platforms from an OSM file (path given in the storage) and stores
   // them in the database as well as in the storage.
@@ -45,8 +47,6 @@ private:
   //
   // data_request_type: determines the data to be considered.
   void generate_and_store_transfer_results(data_request_type const);
-
-  storage storage_;
 };
 
 }  // namespace transfers
