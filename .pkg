@@ -19,7 +19,7 @@
   branch=master
   commit=5be96596cb38c8a7919c5f543097429061c16fb6
 [nigiri]
-  url=git@github.com:anothercar/nigiri.git
+  url=git@github.com:carstenhagelgans/nigiri.git
   branch=profiles
   commit=b237f4f115a1df2f072ec54100e6418328fb8ec8
 [osmium]
