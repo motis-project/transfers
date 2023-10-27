@@ -14,6 +14,12 @@ namespace transfers {
 enum class first_update { kNoUpdate, kProfiles, kTimetable, kOSM };
 enum class routing_type { kNoRouting, kPartialRouting, kFullRouting };
 
+struct routing_graph_config {
+  std::size_t edge_rtree_size_{1024UL * 1024 * 1024 * 3};
+  std::size_t area_rtree_size_{1024UL * 1024 * 1024};
+  bool lock_rtree_{false};
+};
+
 struct storage_updater_config {
   // storage
   std::filesystem::path db_file_path_;
@@ -27,6 +33,9 @@ struct storage_updater_config {
   // matching config
   double max_matching_dist_{400};
   double max_bus_stop_matching_dist_{120};
+
+  // routing_graph config
+  routing_graph_config rg_config_;
 };
 
 struct storage_updater {
@@ -38,7 +47,8 @@ struct storage_updater {
         ppr_rg_path_(config.ppr_rg_path_),
         nigiri_dump_path_(config.nigiri_dump_path_),
         max_matching_dist_(config.max_matching_dist_),
-        max_bus_stop_matching_dist_(config.max_bus_stop_matching_dist_) {
+        max_bus_stop_matching_dist_(config.max_bus_stop_matching_dist_),
+        rg_config_(config.rg_config_) {
     storage_.initialize();
   }
   storage_updater(std::filesystem::path const& db_file_path,
@@ -89,6 +99,8 @@ private:
 
   double max_matching_dist_{400};
   double max_bus_stop_matching_dist_{120};
+
+  routing_graph_config rg_config_;
 
   utl::progress_tracker_ptr progress_tracker_{
       utl::get_active_progress_tracker()};

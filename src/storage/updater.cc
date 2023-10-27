@@ -100,7 +100,7 @@ void storage_updater::generate_and_store_transfer_requests(
       storage_.get_transfer_request_keys_generation_data();
 
   progress_tracker_->status("Generate Transfer Requests.")
-      .out_bounds(15.F, 50.F)
+      .out_bounds(15.F, 30.F)
       .in_high(4 * treq_gen_data.profile_key_to_search_profile_.size());
   storage_.add_new_transfer_requests_keys(
       std::move(generate_transfer_requests_keys(
@@ -112,13 +112,17 @@ void storage_updater::generate_and_store_transfer_results(
     data_request_type const request_type) {
   p::routing_graph rg;
   ps::read_routing_graph(rg, ppr_rg_path_);
+  rg.prepare_for_routing(
+      rg_config_.edge_rtree_size_, rg_config_.area_rtree_size_,
+      rg_config_.lock_rtree_ ? ::ppr::rtree_options::LOCK
+                             : ::ppr::rtree_options::PREFETCH);
 
   auto treqs =
       to_transfer_requests(storage_.get_transfer_requests_keys(request_type),
                            storage_.get_all_matchings());
 
   progress_tracker_->status("Generate Transfer Results.")
-      .out_bounds(50.F, 90.F)
+      .out_bounds(30.F, 90.F)
       .in_high(treqs.size());
 
   storage_.add_new_transfer_results(std::move(route_multiple_requests(
