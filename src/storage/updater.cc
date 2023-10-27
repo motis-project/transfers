@@ -72,19 +72,36 @@ void storage_updater::partial_update(transfers::first_update const first,
 }
 
 void storage_updater::extract_and_store_osm_platforms() {
+  progress_tracker_->status("Extract OSM Platforms")
+      .out_bounds(0.F, 5.F)
+      .in_high(1);
   storage_.add_new_platforms(
       std::move(extract_platforms_from_osm_file(osm_path_)));
+  progress_tracker_->increment();
 }
 
 void storage_updater::match_and_store_matches_by_distance() {
-  auto matcher =
-      distance_matcher(storage_.get_matching_data(),
-                       {max_matching_dist_, max_bus_stop_matching_dist_});
+  auto const matching_data = storage_.get_matching_data();
+
+  progress_tracker_->status("Match Nigiri Locations and OSM Platforms.")
+      .out_bounds(5.F, 15.F)
+      .in_high(matching_data.locations_to_match_.ids_.size());
+
+  auto matcher = distance_matcher(
+      matching_data, {max_matching_dist_, max_bus_stop_matching_dist_});
+
+  progress_tracker_->status("Save Matchings.");
   storage_.add_new_matching_results(std::move(matcher.matching()));
 }
 
 void storage_updater::generate_and_store_transfer_requests(
     bool const old_to_old) {
+  auto const treq_gen_data =
+      storage_.get_transfer_request_keys_generation_data();
+
+  progress_tracker_->status("Generate Transfer Requests.")
+      .out_bounds(15.F, 50.F)
+      .in_high(4 * treq_gen_data.profile_key_to_search_profile_.size());
   storage_.add_new_transfer_requests_keys(
       std::move(generate_transfer_requests_keys(
           storage_.get_transfer_request_keys_generation_data(),
@@ -99,6 +116,10 @@ void storage_updater::generate_and_store_transfer_results(
   auto treqs =
       to_transfer_requests(storage_.get_transfer_requests_keys(request_type),
                            storage_.get_all_matchings());
+
+  progress_tracker_->status("Generate Transfer Results.")
+      .out_bounds(50.F, 90.F)
+      .in_high(treqs.size());
 
   storage_.add_new_transfer_results(std::move(route_multiple_requests(
       treqs, rg, storage_.profile_key_to_search_profile_)));

@@ -16,10 +16,8 @@ matching_results distance_matcher::matching() {
   auto matches = matching_results{};
 
   auto progress_tracker = utl::get_active_progress_tracker();
-  progress_tracker->reset_bounds().in_high(
-      data_.locations_to_match_.ids_.size());
 
-  for (auto i = std::size_t{0U}; i < data_.locations_to_match_.names_.size();
+  for (auto i = std::size_t{0U}; i < data_.locations_to_match_.ids_.size();
        ++i) {
     progress_tracker->increment();
     auto nloc = data_.locations_to_match_.get(n::location_idx_t{i});

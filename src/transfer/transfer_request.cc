@@ -4,6 +4,7 @@
 
 #include "fmt/core.h"
 
+#include "utl/progress_tracker.h"
 #include "utl/verify.h"
 
 namespace transfers {
@@ -80,6 +81,8 @@ transfer_requests_keys generate_transfer_requests_keys(
         return from_to_trs;
       };
 
+  auto progress_tracker = utl::get_active_progress_tracker();
+
   // new possible transfers: 1 -> 2, 2 -> 1, 2 -> 2
   for (auto const& [prf_key, prf_info] : profiles) {
     if (opts.old_to_old_) {
@@ -87,16 +90,22 @@ transfer_requests_keys generate_transfer_requests_keys(
       result.insert(result.end(), trs11.begin(), trs11.end());
     }
 
+    progress_tracker->increment();
+
     if (!data.update_.set_matched_pfs_idx_) {
+      progress_tracker->increment(3);
       continue;
     }
 
     // new transfers from old to update (1 -> 2)
     auto trs12 = all_pairs_trs(data.old_, data.update_, prf_key);
+    progress_tracker->increment();
     // new transfers from update to old (2 -> 1)
     auto trs21 = all_pairs_trs(data.update_, data.old_, prf_key);
+    progress_tracker->increment();
     // new transfers from update to update (2 -> 2)
     auto trs22 = all_pairs_trs(data.update_, data.update_, prf_key);
+    progress_tracker->increment();
 
     result.insert(result.end(), trs12.begin(), trs12.end());
     result.insert(result.end(), trs21.begin(), trs21.end());

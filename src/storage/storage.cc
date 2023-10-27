@@ -10,6 +10,7 @@
 #include "utl/pipes/all.h"
 #include "utl/pipes/transform.h"
 #include "utl/pipes/vec.h"
+#include "utl/progress_tracker.h"
 
 namespace n = ::nigiri;
 namespace fs = std::filesystem;
@@ -22,6 +23,12 @@ void storage::save_tt(fs::path const& save_to) const { tt_.write(save_to); }
 
 void storage::update_tt(fs::path const& save_to) {
   auto const to_nigiri_transfer_data = get_to_nigiri_data();
+
+  auto const progress_tracker = utl::get_active_progress_tracker();
+  progress_tracker->status("Update Timetable")
+      .out_bounds(90.F, 100.F)
+      .in_high(to_nigiri_transfer_data.transfer_results_.size());
+
   auto const nigiri_transfers_data =
       build_nigiri_transfers(to_nigiri_transfer_data);
   set_new_timetable_transfers(nigiri_transfers_data);

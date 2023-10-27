@@ -28,7 +28,6 @@ nigiri_transfers build_nigiri_transfers(to_nigiri_data const& data) {
 
   // update progress tracker
   auto const progress_tracker = utl::get_active_progress_tracker();
-  progress_tracker->reset_bounds().in_high(data.transfer_results_.size());
 
   // initialize out_/in_ multimap in ntransfers
   for (auto prf_idx = n::profile_idx_t{0U}; prf_idx < n::kMaxProfiles;

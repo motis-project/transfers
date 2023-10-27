@@ -7,6 +7,8 @@
 
 #include "nigiri/timetable.h"
 
+#include "utl/progress_tracker.h"
+
 namespace transfers {
 
 enum class first_update { kNoUpdate, kProfiles, kTimetable, kOSM };
@@ -87,6 +89,9 @@ private:
 
   double max_matching_dist_{400};
   double max_bus_stop_matching_dist_{120};
+
+  utl::progress_tracker_ptr progress_tracker_{
+      utl::get_active_progress_tracker()};
 };
 
 }  // namespace transfers

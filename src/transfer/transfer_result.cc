@@ -104,7 +104,6 @@ transfer_results route_multiple_requests(
   auto result = transfer_results{};
 
   auto progress_tracker = utl::get_active_progress_tracker();
-  progress_tracker->in_high(treqs.size());
 
   boost::mutex mutex;
   utl::parallel_for(treqs, [&](auto const& treq) {
