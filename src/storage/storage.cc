@@ -1,16 +1,12 @@
 #include "transfers/storage/storage.h"
 
-#include <utility>
-
 #include "transfers/storage/to_nigiri.h"
 
 #include "nigiri/footpath.h"
 #include "nigiri/types.h"
 
-#include "utl/pipes/all.h"
-#include "utl/pipes/transform.h"
-#include "utl/pipes/vec.h"
 #include "utl/progress_tracker.h"
+#include "utl/to_vec.h"
 
 namespace n = ::nigiri;
 namespace fs = std::filesystem;
@@ -85,31 +81,27 @@ void storage::add_new_profiles(std::vector<string_t> const& profile_names) {
 
 void storage::add_new_platforms(std::vector<platform> pfs) {
   auto const added_to_db = db_.put_platforms(pfs);
-  auto new_pfs = utl::all(added_to_db) |
-                 utl::transform([&pfs](auto const i) { return pfs[i]; }) |
-                 utl::vec();
+  auto new_pfs = utl::to_vec(
+      added_to_db, [&pfs](auto const i) -> platform { return pfs[i]; });
 
-  update_state_.pfs_idx_ =
-      std::make_unique<platform_index>(platform_index{new_pfs});
+  update_state_.pfs_idx_ = std::make_unique<platform_index>(new_pfs);
   update_state_.set_pfs_idx_ = true;
 }
 
 void storage::add_new_matching_results(matching_results const mrs) {
   auto const added_to_db = db_.put_matching_results(mrs);
-  auto const new_mrs = utl::all(added_to_db) |
-                       utl::transform([&mrs](auto const i) { return mrs[i]; }) |
-                       utl::vec();
+  auto const new_mrs = utl::to_vec(
+      added_to_db, [&mrs](auto const i) -> matching_result { return mrs[i]; });
 
   auto matched_pfs = std::vector<platform>{};
   for (auto const& mr : new_mrs) {
-    update_state_.matches_.insert(
-        std::pair<nlocation_key_t, platform>(to_key(mr.nloc_pos_), mr.pf_));
+    update_state_.matches_.emplace(to_key(mr.nloc_pos_), mr.pf_);
     update_state_.nloc_keys_.emplace_back(to_key(mr.nloc_pos_));
     matched_pfs.emplace_back(mr.pf_);
   }
 
   update_state_.matched_pfs_idx_ =
-      std::make_unique<platform_index>(platform_index{matched_pfs});
+      std::make_unique<platform_index>(matched_pfs);
   update_state_.set_matched_pfs_idx_ = true;
 }
 
@@ -117,46 +109,35 @@ void storage::add_new_transfer_requests_by_keys(
     std::vector<transfer_request_by_keys> const treqs_k) {
   auto const updated_in_db = db_.update_transfer_requests_by_keys(treqs_k);
   auto const added_to_db = db_.put_transfer_requests_by_keys(treqs_k);
+  update_state_.transfer_requests_by_keys_.clear();
 
-  auto const updated_treqs_k =
-      utl::all(updated_in_db) |
-      utl::transform([&treqs_k](auto const i) { return treqs_k[i]; }) |
-      utl::vec();
-  auto const new_treqs_k =
-      utl::all(added_to_db) |
-      utl::transform([&treqs_k](auto const i) { return treqs_k[i]; }) |
-      utl::vec();
+  for (auto const i : updated_in_db) {
+    update_state_.transfer_requests_by_keys_.emplace_back(treqs_k[i]);
+  }
 
-  auto result = std::vector<transfer_request_by_keys>{};
-  result.insert(result.end(), updated_treqs_k.begin(), updated_treqs_k.end());
-  result.insert(result.end(), new_treqs_k.begin(), new_treqs_k.end());
-
-  update_state_.transfer_requests_by_keys_ = result;
+  for (auto const i : added_to_db) {
+    update_state_.transfer_requests_by_keys_.emplace_back(treqs_k[i]);
+  }
 }
 
 void storage::add_new_transfer_results(
     std::vector<transfer_result> const tres) {
   auto const updated_in_db = db_.update_transfer_results(tres);
   auto const added_to_db = db_.put_transfer_results(tres);
+  update_state_.transfer_results_.clear();
 
-  auto const updated_tres =
-      utl::all(updated_in_db) |
-      utl::transform([&tres](auto const i) { return tres[i]; }) | utl::vec();
-  auto const new_tres =
-      utl::all(added_to_db) |
-      utl::transform([&tres](auto const i) { return tres[i]; }) | utl::vec();
+  for (auto const i : updated_in_db) {
+    update_state_.transfer_results_.emplace_back(tres[i]);
+  }
 
-  auto result = std::vector<transfer_result>{};
-  result.insert(result.end(), updated_tres.begin(), updated_tres.end());
-  result.insert(result.end(), new_tres.begin(), new_tres.end());
-
-  update_state_.transfer_results_ = result;
+  for (auto const i : added_to_db) {
+    update_state_.transfer_results_.emplace_back(tres[i]);
+  }
 }
 
 void storage::load_old_state_from_db(set<profile_key_t> const& profile_keys) {
   auto old_pfs = db_.get_platforms();
-  old_state_.pfs_idx_ =
-      std::make_unique<platform_index>(platform_index{old_pfs});
+  old_state_.pfs_idx_ = std::make_unique<platform_index>(old_pfs);
   old_state_.set_pfs_idx_ = true;
   old_state_.matches_ = db_.get_loc_to_pf_matchings();
   old_state_.transfer_requests_by_keys_ =
@@ -170,8 +151,7 @@ void storage::load_old_state_from_db(set<profile_key_t> const& profile_keys) {
     matched_pfs.emplace_back(pf);
   }
   old_state_.nloc_keys_ = matched_nloc_keys;
-  old_state_.matched_pfs_idx_ =
-      std::make_unique<platform_index>(platform_index{matched_pfs});
+  old_state_.matched_pfs_idx_ = std::make_unique<platform_index>(matched_pfs);
   old_state_.set_matched_pfs_idx_ = true;
 }
 

@@ -129,9 +129,9 @@ private:
     vector<nlocation_key_t> nloc_keys_;
 
     // mapping matched nloc to pf
-    hash_map<nlocation_key_t, platform> matches_;
-    std::vector<transfer_request_by_keys> transfer_requests_by_keys_;
-    std::vector<transfer_result> transfer_results_;
+    hash_map<nlocation_key_t, platform> matches_{};
+    std::vector<transfer_request_by_keys> transfer_requests_by_keys_{};
+    std::vector<transfer_result> transfer_results_{};
   } old_state_, update_state_;
 
   database db_;
