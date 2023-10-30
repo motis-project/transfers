@@ -1,7 +1,9 @@
 #include "transfers/transfer/transfer_result.h"
 
 #include <cmath>
+#include <cstring>
 #include <algorithm>
+#include <string>
 
 #include "transfers/platform/to_ppr.h"
 
@@ -12,7 +14,6 @@
 
 #include "ppr/routing/input_location.h"
 #include "ppr/routing/route.h"
-#include "ppr/routing/routing_query.h"
 #include "ppr/routing/search.h"
 
 #include "utl/parallel_for.h"
@@ -42,11 +43,19 @@ std::vector<std::vector<transfer_info>> to_transfer_infos(
   });
 }
 
-// Builds a ppr::routing_query using the given `transfer_request` and a map of
-// `profile_keys_t` to `search_profile_` to get the search profile of the
-// `transfer_request`.
-pr::routing_query make_routing_query(
-    hash_map<profile_key_t, pr::search_profile> const& profiles,
+string_t transfer_result::key() const {
+  auto key = std::string{};
+
+  // transfer_result key: from location key + profile key
+  key.resize(sizeof(from_nloc_key_) + sizeof(profile_));
+  std::memcpy(key.data(), &from_nloc_key_, sizeof(from_nloc_key_));
+  std::memcpy(key.data() + sizeof(from_nloc_key_), &profile_, sizeof(profile_));
+
+  return string_t{key};
+}
+
+pr::routing_query build_routing_query(
+    const hash_map<profile_key_t, pr::search_profile>& profiles,
     transfer_request const& treq) {
   // query: create start input_location
   auto const& li_start = to_input_location(treq.transfer_start_);
@@ -73,7 +82,7 @@ transfer_result route_single_request(
   tres.from_nloc_key_ = treq.from_nloc_key_;
   tres.profile_ = treq.profile_;
 
-  auto const& rq = make_routing_query(profiles, treq);
+  auto const& rq = build_routing_query(profiles, treq);
 
   // route using find_routes_v2
   auto const& search_res = pr::find_routes_v2(rg, rq);
@@ -159,10 +168,6 @@ transfer_result merge(transfer_result const& a, transfer_result const& b) {
   return merged;
 }
 
-string_t to_key(transfer_result const& tres) {
-  return {fmt::format("{}{}", tres.from_nloc_key_, tres.profile_)};
-}
-
 std::ostream& operator<<(std::ostream& out, transfer_info const& tinfo) {
   return out << "[transfer info] - dur: " << tinfo.duration_
              << ", dist: " << tinfo.distance_;
@@ -170,7 +175,7 @@ std::ostream& operator<<(std::ostream& out, transfer_info const& tinfo) {
 
 std::ostream& operator<<(std::ostream& out, transfer_result const& tres) {
   std::stringstream tres_repr;
-  tres_repr << "[transfer result] " << to_key(tres) << " holds "
+  tres_repr << "[transfer result] " << tres.key() << " holds "
             << tres.infos_.size() << " routing results.";
   return out << tres_repr.str();
 }

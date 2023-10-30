@@ -1,5 +1,8 @@
 #include "transfers/transfer/transfer_request.h"
 
+#include <cstring>
+#include <string>
+
 #include "transfers/types.h"
 
 #include "fmt/core.h"
@@ -8,6 +11,28 @@
 #include "utl/verify.h"
 
 namespace transfers {
+
+string_t transfer_request_by_keys::key() const {
+  auto key = std::string{};
+
+  // transfer_request_by_keys key: from location key + profile key
+  key.resize(sizeof(from_nloc_key_) + sizeof(profile_));
+  std::memcpy(key.data(), &from_nloc_key_, sizeof(from_nloc_key_));
+  std::memcpy(key.data() + sizeof(from_nloc_key_), &profile_, sizeof(profile_));
+
+  return string_t{key};
+}
+
+string_t transfer_request::key() const {
+  auto key = std::string{};
+
+  // transfer_request key: from location key + profile key
+  key.resize(sizeof(from_nloc_key_) + sizeof(profile_));
+  std::memcpy(key.data(), &from_nloc_key_, sizeof(from_nloc_key_));
+  std::memcpy(key.data() + sizeof(from_nloc_key_), &profile_, sizeof(profile_));
+
+  return string_t{key};
+}
 
 std::vector<transfer_request> to_transfer_requests(
     std::vector<transfer_request_by_keys> const& treqs_k,
@@ -154,24 +179,16 @@ transfer_request_by_keys merge(transfer_request_by_keys const& a,
   return merged;
 }
 
-string_t to_key(transfer_request_by_keys const& treq_k) {
-  return {fmt::format("{}{}", treq_k.from_nloc_key_, treq_k.profile_)};
-}
-
-string_t to_key(transfer_request const& treq) {
-  return {fmt::format("{}{}", treq.from_nloc_key_, treq.profile_)};
-}
-
 std::ostream& operator<<(std::ostream& out, transfer_request const& treq) {
   auto treq_repr = fmt::format("[transfer request] {} has {} locations.",
-                               to_key(treq), treq.to_nloc_keys_.size());
+                               treq.key(), treq.to_nloc_keys_.size());
   return out << treq_repr;
 }
 
 std::ostream& operator<<(std::ostream& out,
                          transfer_request_by_keys const& treq_k) {
   auto treq_k_repr = fmt::format("[transfer request keys] {} has {} locations.",
-                                 to_key(treq_k), treq_k.to_nloc_keys_.size());
+                                 treq_k.key(), treq_k.to_nloc_keys_.size());
   return out << treq_k_repr;
 }
 

@@ -12,10 +12,14 @@
 namespace transfers {
 
 struct transfer_request_by_keys {
+  CISTA_COMPARABLE();
   friend std::ostream& operator<<(std::ostream&,
                                   transfer_request_by_keys const&);
 
-  CISTA_COMPARABLE();
+  // Returns a short and unique `transfer_request_by_keys` representation that
+  // can be used as a database id/key.
+  string_t key() const;
+
   nlocation_key_t from_nloc_key_;
   vector<nlocation_key_t> to_nloc_keys_;
   profile_key_t profile_;
@@ -23,6 +27,10 @@ struct transfer_request_by_keys {
 
 struct transfer_request {
   friend std::ostream& operator<<(std::ostream&, transfer_request const&);
+
+  // Returns a short and unique `transfer_request` representation that can be
+  // used as a database id/key.
+  string_t key() const;
 
   platform transfer_start_;
   nlocation_key_t from_nloc_key_;
@@ -86,13 +94,5 @@ generate_all_pair_transfer_requests_by_keys(
 // - both `transfer_request_keys` structs have the same `profile_key_t`
 transfer_request_by_keys merge(transfer_request_by_keys const& /* a */,
                                transfer_request_by_keys const& /* b */);
-
-// Returns a unique string representation of the given `transfer_request_keys`
-// struct.
-string_t to_key(transfer_request_by_keys const&);
-
-// Returns a unique string representation of the given `transfer_request`
-// struct.
-string_t to_key(transfer_request const&);
 
 }  // namespace transfers

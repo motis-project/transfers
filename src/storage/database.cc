@@ -229,7 +229,7 @@ std::vector<std::size_t> database::put_transfer_requests_by_keys(
   auto transreqs_db = transreqs_dbi(txn);
 
   for (auto const& [idx, treq_k] : utl::enumerate(treqs_k)) {
-    auto const treq_key = to_key(treq_k);
+    auto const treq_key = treq_k.key();
 
     if (auto const r = txn.get(transreqs_db, treq_key); r.has_value()) {
       continue;  // transfer request already in db
@@ -255,8 +255,8 @@ std::vector<std::size_t> database::update_transfer_requests_by_keys(
   auto txn = lmdb::txn{env_};
   auto transreqs_db = transreqs_dbi(txn);
 
-  for (auto [idx, treq] : utl::enumerate(treqs_k)) {
-    auto treq_key = to_key(treq);
+  for (auto const& [idx, treq] : utl::enumerate(treqs_k)) {
+    auto treq_key = treq.key();
 
     if (auto const r = txn.get(transreqs_db, treq_key); !r.has_value()) {
       continue;  // transfer request not in db
@@ -318,14 +318,14 @@ std::vector<std::size_t> database::put_transfer_results(
   auto txn = lmdb::txn{env_};
   auto transfers_db = transfers_dbi(txn);
 
-  for (auto const& [idx, tr] : utl::enumerate(trs)) {
-    auto const tr_key = to_key(tr);
+  for (auto const& [idx, tres] : utl::enumerate(trs)) {
+    auto const tr_key = tres.key();
 
     if (auto const r = txn.get(transfers_db, tr_key); r.has_value()) {
       continue;  // transfer already in db
     }
 
-    auto const serialized_tr = cista::serialize(tr);
+    auto const serialized_tr = cista::serialize(tres);
     txn.put(transfers_db, tr_key, view(serialized_tr));
     added_indices.emplace_back(idx);
   }
@@ -346,7 +346,7 @@ std::vector<std::size_t> database::update_transfer_results(
   auto transfers_db = transfers_dbi(txn);
 
   for (auto const& [idx, tres] : utl::enumerate(trs)) {
-    auto const tres_key = to_key(tres);
+    auto const tres_key = tres.key();
 
     if (auto const r = txn.get(transfers_db, tres_key); !r.has_value()) {
       continue;  // transfer not in db

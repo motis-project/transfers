@@ -7,6 +7,7 @@
 #include "transfers/types.h"
 
 #include "ppr/common/routing_graph.h"
+#include "ppr/routing/routing_query.h"
 #include "ppr/routing/search_profile.h"
 
 #include "nigiri/types.h"
@@ -14,23 +15,35 @@
 namespace transfers {
 
 struct transfer_info {
+  CISTA_COMPARABLE();
   friend std::ostream& operator<<(std::ostream&, transfer_info const&);
 
-  CISTA_COMPARABLE();
   ::nigiri::duration_t duration_{};
   double distance_{};
 };
 
 struct transfer_result {
+  CISTA_COMPARABLE();
   friend std::ostream& operator<<(std::ostream&, transfer_result const&);
 
-  CISTA_COMPARABLE();
+  // Returns a short and unique `transfer_result` representation that can be
+  // used as a database id/key.
+  string_t key() const;
+
   nlocation_key_t from_nloc_key_;
   vector<nlocation_key_t> to_nloc_keys_;
   profile_key_t profile_;
 
   vector<transfer_info> infos_;
 };
+
+// Builds a ppr::routing_query using the given `transfer_request` and a map of
+// `profile_keys_t` to `search_profile_` to get the search profile of the
+// `transfer_request`.
+::ppr::routing::routing_query build_routing_query(
+    const hash_map<profile_key_t,
+                   ::ppr::routing::search_profile>& /* profiles */,
+    transfer_request const& /* treq */);
 
 // Routes a single `transfer_request` and returns the corresponding
 // `transfer_result`. PPR is used for routing.
@@ -60,8 +73,5 @@ std::vector<transfer_result> route_multiple_requests(
 // - `rhs.to_nloc_keys_.size() == rhs.infos_.size()`
 transfer_result merge(transfer_result const& /* a */,
                       transfer_result const& /* b */);
-
-// Returns a unique string representation of the given `transfer_result` struct.
-string_t to_key(transfer_result const&);
 
 }  // namespace transfers
