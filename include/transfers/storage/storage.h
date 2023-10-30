@@ -66,7 +66,7 @@ struct storage {
   // `profile_key_t` to previously unknown profile names. Updates the `name
   // -> profile_key_t` storage map. Updates the `profile_key_t -> name`
   // storage map.
-  void add_new_profiles(std::vector<string> const&);
+  void add_new_profiles(std::vector<string_t> const&);
 
   // Adds new platforms to the database. Previously unknown platforms are added
   // to the `update_state_` state struct. Deletes old `update_state_` platforms.
@@ -93,8 +93,8 @@ struct storage {
 
   ::nigiri::timetable& tt_;
 
-  hash_map<string, profile_key_t> profile_name_to_profile_key_;
-  hash_map<profile_key_t, string> profile_key_to_profile_name_;
+  hash_map<string_t, profile_key_t> profile_name_to_profile_key_;
+  hash_map<profile_key_t, string_t> profile_key_to_profile_name_;
   hash_map<profile_key_t, ::ppr::routing::search_profile>
       profile_key_to_search_profile_;
   set<profile_key_t> used_profiles_;

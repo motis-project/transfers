@@ -160,7 +160,7 @@ transfer_result merge(transfer_result const& tres_a,
   return merged;
 }
 
-string to_key(transfer_result const& tres) {
+string_t to_key(transfer_result const& tres) {
   return {fmt::format("{}{}", tres.from_nloc_key_, tres.profile_)};
 }
 

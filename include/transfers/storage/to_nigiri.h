@@ -19,7 +19,7 @@ struct to_nigiri_data {
 
   // --- storage data ---
 
-  hash_map<profile_key_t, string> const& profile_key_to_profile_name_;
+  hash_map<profile_key_t, string_t> const& profile_key_to_profile_name_;
 
   // --- transfer results ---
 

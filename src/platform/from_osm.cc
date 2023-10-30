@@ -95,7 +95,7 @@ void osm_platform_extractor::platform_handler::area(osmium::Area const& area) {
 
 void osm_platform_extractor::platform_handler::add_platform(
     osm_type const type, osmium::object_id_type const id,
-    osmium::geom::Coordinates const& coord, strings const& names,
+    osmium::geom::Coordinates const& coord, strings_t const& names,
     bool is_bus_stop) {
   platforms_.emplace_back(
       platform{geo::latlng{coord.y, coord.x}, id, type, names, is_bus_stop});
@@ -111,22 +111,22 @@ bool osm_platform_extractor::platform_handler::platform_is_bus_stop(
   return (tag_list.has_tag("highway", "bus_stop"));
 }
 
-strings osm_platform_extractor::platform_handler::get_platform_names(
+strings_t osm_platform_extractor::platform_handler::get_platform_names(
     osmium::TagList const& tag_list) {
-  auto const default_value = string{"n/a"};
+  auto const default_value = string_t{"n/a"};
 
   auto vector_names =
       utl::all(osm_name_tag_keys_) |
       utl::transform([&tag_list, &default_value](auto const& key) {
-        return string{tag_list.get_value_by_key(key.c_str(),
-                                                default_value.str().c_str())};
+        return string_t{tag_list.get_value_by_key(key.c_str(),
+                                                  default_value.str().c_str())};
       }) |
       utl::unique() | utl::remove_if([&default_value](auto const& name) {
         return name == default_value;
       }) |
       utl::vec();
 
-  auto names = strings{};
+  auto names = strings_t{};
   for (auto const& name : vector_names) {
     names.emplace_back(name);
   }

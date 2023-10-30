@@ -59,7 +59,7 @@ transfer_results route_multiple_requests(
 transfer_result merge(transfer_result const&, transfer_result const&);
 
 // Returns a unique string representation of the given `transfer_result` struct.
-string to_key(transfer_result const&);
+string_t to_key(transfer_result const&);
 
 std::ostream& operator<<(std::ostream&, transfer_info const&);
 std::ostream& operator<<(std::ostream&, transfer_result const&);

@@ -76,7 +76,7 @@ treq_k_generation_data storage::get_transfer_request_keys_generation_data() {
           profile_key_to_search_profile_};
 }
 
-void storage::add_new_profiles(std::vector<string> const& profile_names) {
+void storage::add_new_profiles(std::vector<string_t> const& profile_names) {
   db_.put_profiles(profile_names);
   profile_name_to_profile_key_ = db_.get_profile_keys();
   profile_key_to_profile_name_ = db_.get_profile_key_to_name();

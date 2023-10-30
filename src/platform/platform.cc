@@ -14,7 +14,7 @@ char get_osm_type_as_char(osm_type const type) {
   }
 }
 
-string to_key(platform const& pf) {
+string_t to_key(platform const& pf) {
   return {fmt::format("{}:{}", std::to_string(pf.osm_id_),
                       get_osm_type_as_char(pf.osm_type_))};
 }

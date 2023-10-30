@@ -69,7 +69,7 @@ private:
     // Equivalent to: platforms_.emplace_back(platform{...})
     void add_platform(osm_type const, osmium::object_id_type const,
                       osmium::geom::Coordinates const&,
-                      strings const& /* names */, bool /* is_bus_stop */);
+                      strings_t const& /* names */, bool /* is_bus_stop */);
 
     // Checks whether the given tag lists describes a platform or not.
     // Equivalent to: osmium::tags::match_any_of(tags, filter);
@@ -81,7 +81,7 @@ private:
 
     // Returns a list of known and unique osm names of the given osm platform
     // described with a tag list.
-    strings get_platform_names(osmium::TagList const&);
+    strings_t get_platform_names(osmium::TagList const&);
   } platform_handler_;
 
   osmium::io::File osm_file_;

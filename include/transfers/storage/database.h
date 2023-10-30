@@ -24,9 +24,9 @@ struct database {
                     std::size_t const db_max_size);
 
   // profiles
-  std::vector<std::size_t> put_profiles(std::vector<string> const&);
-  hash_map<string, profile_key_t> get_profile_keys();
-  hash_map<profile_key_t, string> get_profile_key_to_name();
+  std::vector<std::size_t> put_profiles(std::vector<string_t> const&);
+  hash_map<string_t, profile_key_t> get_profile_keys();
+  hash_map<profile_key_t, string_t> get_profile_key_to_name();
 
   // platforms
   std::vector<std::size_t> put_platforms(std::vector<platform>&);
@@ -62,8 +62,8 @@ private:
 
   void init();
 
-  std::vector<std::pair<nlocation_key_t, string>> get_matchings();
-  std::optional<platform> get_platform(string const& /* osm_key */);
+  std::vector<std::pair<nlocation_key_t, string_t>> get_matchings();
+  std::optional<platform> get_platform(string_t const& /* osm_key */);
 
   lmdb::env mutable env_;
   profile_key_t highest_profile_id_{};

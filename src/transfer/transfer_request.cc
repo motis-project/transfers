@@ -149,11 +149,11 @@ transfer_request_keys merge(transfer_request_keys const& lhs,
   return merged;
 }
 
-string to_key(transfer_request_keys const& treq_k) {
+string_t to_key(transfer_request_keys const& treq_k) {
   return {fmt::format("{}{}", treq_k.from_nloc_key_, treq_k.profile_)};
 }
 
-string to_key(transfer_request const& treq) {
+string_t to_key(transfer_request const& treq) {
   return {fmt::format("{}{}", treq.from_nloc_key_, treq.profile_)};
 }
 

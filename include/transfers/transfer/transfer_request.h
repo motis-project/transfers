@@ -84,11 +84,11 @@ transfer_request_keys merge(transfer_request_keys const& /* lhs */,
 
 // Returns a unique string representation of the given `transfer_request_keys`
 // struct.
-string to_key(transfer_request_keys const&);
+string_t to_key(transfer_request_keys const&);
 
 // Returns a unique string representation of the given `transfer_request`
 // struct.
-string to_key(transfer_request const&);
+string_t to_key(transfer_request const&);
 
 std::ostream& operator<<(std::ostream&, transfer_request const&);
 std::ostream& operator<<(std::ostream&, transfer_request_keys const&);

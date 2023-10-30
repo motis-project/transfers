@@ -53,7 +53,7 @@ void database::init() {
 }
 
 std::vector<std::size_t> database::put_profiles(
-    std::vector<string> const& prf_names) {
+    std::vector<string_t> const& prf_names) {
   auto added_indices = std::vector<std::size_t>{};
 
   auto txn = lmdb::txn{env_};
@@ -73,8 +73,8 @@ std::vector<std::size_t> database::put_profiles(
   return added_indices;
 }
 
-hash_map<string, profile_key_t> database::get_profile_keys() {
-  auto keys_with_name = hash_map<string, profile_key_t>{};
+hash_map<string_t, profile_key_t> database::get_profile_keys() {
+  auto keys_with_name = hash_map<string_t, profile_key_t>{};
 
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto profiles_db = profiles_dbi(txn);
@@ -82,8 +82,8 @@ hash_map<string, profile_key_t> database::get_profile_keys() {
   auto entry = cur.get(lmdb::cursor_op::FIRST);
 
   while (entry.has_value()) {
-    keys_with_name.insert(std::pair<string, profile_key_t>(
-        string{entry->first},
+    keys_with_name.insert(std::pair<string_t, profile_key_t>(
+        string_t{entry->first},
         cista::copy_from_potentially_unaligned<profile_key_t>(entry->second)));
     entry = cur.get(lmdb::cursor_op::NEXT);
   }
@@ -92,8 +92,8 @@ hash_map<string, profile_key_t> database::get_profile_keys() {
   return keys_with_name;
 }
 
-hash_map<profile_key_t, string> database::get_profile_key_to_name() {
-  auto keys_with_name = hash_map<profile_key_t, string>{};
+hash_map<profile_key_t, string_t> database::get_profile_key_to_name() {
+  auto keys_with_name = hash_map<profile_key_t, string_t>{};
 
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto profiles_db = profiles_dbi(txn);
@@ -101,9 +101,9 @@ hash_map<profile_key_t, string> database::get_profile_key_to_name() {
   auto entry = cur.get(lmdb::cursor_op::FIRST);
 
   while (entry.has_value()) {
-    keys_with_name.insert(std::pair<profile_key_t, string>(
+    keys_with_name.insert(std::pair<profile_key_t, string_t>(
         cista::copy_from_potentially_unaligned<profile_key_t>(entry->second),
-        string{entry->first}));
+        string_t{entry->first}));
     entry = cur.get(lmdb::cursor_op::NEXT);
   }
 
@@ -150,7 +150,7 @@ std::vector<platform> database::get_platforms() {
   return pfs;
 }
 
-std::optional<platform> database::get_platform(string const& osm_key) {
+std::optional<platform> database::get_platform(string_t const& osm_key) {
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto platforms_db = platforms_dbi(txn);
 
@@ -190,8 +190,8 @@ std::vector<size_t> database::put_matching_results(
   return added_indices;
 }
 
-std::vector<std::pair<nlocation_key_t, string>> database::get_matchings() {
-  auto matchings = std::vector<std::pair<nlocation_key_t, string>>{};
+std::vector<std::pair<nlocation_key_t, string_t>> database::get_matchings() {
+  auto matchings = std::vector<std::pair<nlocation_key_t, string_t>>{};
 
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto matchings_db = matchings_dbi(txn);
@@ -201,7 +201,7 @@ std::vector<std::pair<nlocation_key_t, string>> database::get_matchings() {
   while (entry.has_value()) {
     matchings.emplace_back(
         cista::copy_from_potentially_unaligned<nlocation_key_t>(entry->first),
-        string{entry->second});
+        string_t{entry->second});
     entry = cur.get(lmdb::cursor_op::NEXT);
   }
   cur.reset();
