@@ -14,13 +14,16 @@
 namespace transfers {
 
 struct transfer_info {
+  friend std::ostream& operator<<(std::ostream&, transfer_info const&);
+
   CISTA_COMPARABLE();
   ::nigiri::duration_t duration_{};
   double distance_{};
 };
-using transfer_infos = std::vector<transfer_info>;
 
 struct transfer_result {
+  friend std::ostream& operator<<(std::ostream&, transfer_result const&);
+
   CISTA_COMPARABLE();
   nlocation_key_t from_nloc_key_;
   vector<nlocation_key_t> to_nloc_keys_;
@@ -28,7 +31,6 @@ struct transfer_result {
 
   vector<transfer_info> infos_;
 };
-using transfer_results = std::vector<transfer_result>;
 
 // Routes a single `transfer_request` and returns the corresponding
 // `transfer_result`. PPR is used for routing.
@@ -40,7 +42,7 @@ transfer_result route_single_request(
 // `transfer_result`s.
 // Equivalent: Calls `route_single_request` for every
 // `transfer_request`.
-transfer_results route_multiple_requests(
+std::vector<transfer_result> route_multiple_requests(
     std::vector<transfer_request> const&, ::ppr::routing_graph const&,
     hash_map<profile_key_t, ::ppr::routing::search_profile> const&);
 
@@ -56,12 +58,10 @@ transfer_results route_multiple_requests(
 // - `lhs.profile_ == rhs.profile_`
 // - `lhs.to_nloc_keys_.size() == lhs.infos_.size()`
 // - `rhs.to_nloc_keys_.size() == rhs.infos_.size()`
-transfer_result merge(transfer_result const&, transfer_result const&);
+transfer_result merge(transfer_result const& /* a */,
+                      transfer_result const& /* b */);
 
 // Returns a unique string representation of the given `transfer_result` struct.
 string_t to_key(transfer_result const&);
-
-std::ostream& operator<<(std::ostream&, transfer_info const&);
-std::ostream& operator<<(std::ostream&, transfer_result const&);
 
 }  // namespace transfers

@@ -134,7 +134,8 @@ void storage::add_new_transfer_requests_by_keys(
   update_state_.transfer_requests_by_keys_ = result;
 }
 
-void storage::add_new_transfer_results(transfer_results const tres) {
+void storage::add_new_transfer_results(
+    std::vector<transfer_result> const tres) {
   auto const updated_in_db = db_.update_transfer_results(tres);
   auto const added_to_db = db_.put_transfer_results(tres);
 
@@ -145,7 +146,7 @@ void storage::add_new_transfer_results(transfer_results const tres) {
       utl::all(added_to_db) |
       utl::transform([&tres](auto const i) { return tres[i]; }) | utl::vec();
 
-  auto result = transfer_results{};
+  auto result = std::vector<transfer_result>{};
   result.insert(result.end(), updated_tres.begin(), updated_tres.end());
   result.insert(result.end(), new_tres.begin(), new_tres.end());
 

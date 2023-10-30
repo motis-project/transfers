@@ -312,7 +312,7 @@ std::vector<transfer_request_by_keys> database::get_transfer_requests_by_keys(
 }
 
 std::vector<std::size_t> database::put_transfer_results(
-    transfer_results const& trs) {
+    std::vector<transfer_result> const& trs) {
   auto added_indices = std::vector<std::size_t>{};
 
   auto txn = lmdb::txn{env_};
@@ -338,7 +338,7 @@ std::vector<std::size_t> database::put_transfer_results(
  * merge and update: transfer_results in db
  */
 std::vector<std::size_t> database::update_transfer_results(
-    transfer_results const& trs) {
+    std::vector<transfer_result> const& trs) {
   auto updated_indices = std::vector<std::size_t>{};
   auto tres_chashing = cista::hashing<transfer_result>{};
 
@@ -374,9 +374,9 @@ std::vector<std::size_t> database::update_transfer_results(
   return updated_indices;
 }
 
-transfer_results database::get_transfer_results(
+std::vector<transfer_result> database::get_transfer_results(
     set<profile_key_t> const& ppr_profile_names) {
-  auto trs = transfer_results{};
+  auto trs = std::vector<transfer_result>{};
 
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto transfers_db = transfers_dbi(txn);

@@ -45,9 +45,11 @@ struct database {
       set<profile_key_t> const&);
 
   // transfer results
-  std::vector<std::size_t> put_transfer_results(transfer_results const&);
-  std::vector<std::size_t> update_transfer_results(transfer_results const&);
-  transfer_results get_transfer_results(set<profile_key_t> const&);
+  std::vector<std::size_t> put_transfer_results(
+      std::vector<transfer_result> const&);
+  std::vector<std::size_t> update_transfer_results(
+      std::vector<transfer_result> const&);
+  std::vector<transfer_result> get_transfer_results(set<profile_key_t> const&);
 
 private:
   static lmdb::txn::dbi profiles_dbi(

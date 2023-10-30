@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "transfers/transfer/transfer_result.h"
 #include "transfers/types.h"
 
@@ -23,7 +25,7 @@ struct to_nigiri_data {
 
   // --- transfer results ---
 
-  transfer_results transfer_results_;
+  std::vector<transfer_result> transfer_results_;
 };
 
 struct nigiri_transfers {

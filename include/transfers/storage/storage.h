@@ -91,7 +91,7 @@ struct storage {
   // transfer results are updated. The difference (described in the transfer
   // result struct is added to the `update_state_` struct.
   // Update merges the old transfer result with the new one.
-  void add_new_transfer_results(transfer_results const);
+  void add_new_transfer_results(std::vector<transfer_result> const);
 
   ::nigiri::timetable& tt_;
 
@@ -131,7 +131,7 @@ private:
     // mapping matched nloc to pf
     hash_map<nlocation_key_t, platform> matches_;
     std::vector<transfer_request_by_keys> transfer_requests_by_keys_;
-    transfer_results transfer_results_;
+    std::vector<transfer_result> transfer_results_;
   } old_state_, update_state_;
 
   database db_;
