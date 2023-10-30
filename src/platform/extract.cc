@@ -7,6 +7,8 @@ namespace fs = std::filesystem;
 namespace transfers {
 
 platforms extract_platforms_from_osm_file(fs::path const& osm_file_path) {
+std::vector<platform> extract_platforms_from_osm_file(
+    fs::path const& osm_file_path) {
   auto osm_extractor = osm_platform_extractor(osm_file_path);
 
   for (auto const& [result, key_matcher, value_matcher] :

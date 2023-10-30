@@ -23,7 +23,7 @@ struct transfer_request {
   platform transfer_start_;
   nlocation_key_t from_nloc_key_;
 
-  platforms transfer_targets_;
+  std::vector<platform> transfer_targets_;
   vector<nlocation_key_t> to_nloc_keys_;
 
   profile_key_t profile_;

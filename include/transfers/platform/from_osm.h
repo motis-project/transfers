@@ -33,7 +33,7 @@ struct osm_platform_extractor {
   // Requirements: at least one filter rule and one name tag have
   // been set.
   // - `!filter_.empty() && !osm_name_tag_keys_.empty()` evaluates to true.
-  platforms get_platforms_identified_in_osm_file();
+  std::vector<platform> get_platforms_identified_in_osm_file();
 
   // Adds a rule according to which the platforms should be extracted from the
   // OSM file.
@@ -50,7 +50,7 @@ private:
   static osmium::geom::Coordinates calc_center(osmium::NodeRefList const&);
 
   struct platform_handler : public osmium::handler::Handler {
-    platforms platforms_;
+    std::vector<platform> platforms_;
     osmium::TagsFilter filter_{false};
     std::vector<std::string> osm_name_tag_keys_;
 

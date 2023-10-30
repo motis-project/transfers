@@ -29,8 +29,8 @@ struct database {
   hash_map<profile_key_t, string> get_profile_key_to_name();
 
   // platforms
-  std::vector<std::size_t> put_platforms(platforms&);
-  platforms get_platforms();
+  std::vector<std::size_t> put_platforms(std::vector<platform>&);
+  std::vector<platform> get_platforms();
 
   // matchings
   std::vector<std::size_t> put_matching_results(matching_results const&);

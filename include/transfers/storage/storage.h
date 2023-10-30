@@ -70,7 +70,7 @@ struct storage {
 
   // Adds new platforms to the database. Previously unknown platforms are added
   // to the `update_state_` state struct. Deletes old `update_state_` platforms.
-  void add_new_platforms(platforms);
+  void add_new_platforms(std::vector<platform>);
 
   // Adds new matching results to the database. Previously unknown matches are
   // added to the `update_state_` state struct.

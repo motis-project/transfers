@@ -12,7 +12,7 @@ void platform_index::make_point_rtree() {
       geo::make_point_rtree(platforms_, [](auto const& pf) { return pf.loc_; });
 }
 
-[[maybe_unused]] platforms platform_index::get_platforms_in_radius(
+[[maybe_unused]] std::vector<platform> platform_index::get_platforms_in_radius(
     geo::latlng const& coord, double const radius) const {
   return utl::all(platform_index_.in_radius(coord, radius)) |
          utl::transform([this](std::size_t i) { return get_platform(i); }) |

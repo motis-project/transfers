@@ -26,6 +26,6 @@ auto const platform_name_keys = std::vector<std::string>{
 // are applied.
 // To extract the names of a platform the keys set in `platform_name_keys` are
 // used.
-platforms extract_platforms_from_osm_file(std::filesystem::path const&);
+std::vector<platform> extract_platforms_from_osm_file(std::filesystem::path const&);
 
 }  // namespace transfers

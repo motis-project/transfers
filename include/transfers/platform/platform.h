@@ -22,7 +22,6 @@ struct platform {
   strings names_;
   bool is_bus_stop_{false};
 };
-using platforms = std::vector<platform>;
 
 // Returns a string representation of the given platform.
 string to_key(platform const&);

@@ -111,7 +111,7 @@ hash_map<profile_key_t, string> database::get_profile_key_to_name() {
   return keys_with_name;
 }
 
-std::vector<std::size_t> database::put_platforms(platforms& pfs) {
+std::vector<std::size_t> database::put_platforms(std::vector<platform>& pfs) {
   auto added_indices = std::vector<std::size_t>{};
 
   auto txn = lmdb::txn{env_};
@@ -132,8 +132,8 @@ std::vector<std::size_t> database::put_platforms(platforms& pfs) {
   return added_indices;
 }
 
-platforms database::get_platforms() {
-  auto pfs = platforms{};
+std::vector<platform> database::get_platforms() {
+  auto pfs = std::vector<platform>{};
 
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto platforms_db = platforms_dbi(txn);

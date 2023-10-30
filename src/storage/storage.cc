@@ -82,7 +82,7 @@ void storage::add_new_profiles(std::vector<string> const& profile_names) {
   profile_key_to_profile_name_ = db_.get_profile_key_to_name();
 }
 
-void storage::add_new_platforms(platforms pfs) {
+void storage::add_new_platforms(std::vector<platform> pfs) {
   auto const added_to_db = db_.put_platforms(pfs);
   auto new_pfs = utl::all(added_to_db) |
                  utl::transform([&pfs](auto const i) { return pfs[i]; }) |
@@ -99,7 +99,7 @@ void storage::add_new_matching_results(matching_results const mrs) {
                        utl::transform([&mrs](auto const i) { return mrs[i]; }) |
                        utl::vec();
 
-  auto matched_pfs = platforms{};
+  auto matched_pfs = std::vector<platform>{};
   for (auto const& mr : new_mrs) {
     update_state_.matches_.insert(
         std::pair<nlocation_key_t, platform>(to_key(mr.nloc_pos_), mr.pf_));
@@ -161,7 +161,7 @@ void storage::load_old_state_from_db(set<profile_key_t> const& profile_keys) {
       db_.get_transfer_requests_keys(profile_keys);
   old_state_.transfer_results_ = db_.get_transfer_results(profile_keys);
 
-  auto matched_pfs = platforms{};
+  auto matched_pfs = std::vector<platform>{};
   auto matched_nloc_keys = vector<nlocation_key_t>{};
   for (auto const& [k, pf] : old_state_.matches_) {
     matched_nloc_keys.emplace_back(k);

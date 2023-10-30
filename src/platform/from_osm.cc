@@ -12,7 +12,8 @@
 
 namespace transfers {
 
-platforms osm_platform_extractor::get_platforms_identified_in_osm_file() {
+std::vector<platform>
+osm_platform_extractor::get_platforms_identified_in_osm_file() {
   utl::verify(!platform_handler_.filter_.empty(),
               "No filter rule has been set to identify platforms in the osm "
               "file. To add a filter rule, use `add_filter_rule(...)`.");

@@ -13,7 +13,8 @@ namespace transfers {
 
 struct platform_index {
 
-  explicit platform_index(platforms& pfs) : platforms_(std::move(pfs)) {
+  explicit platform_index(std::vector<platform>& pfs)
+      : platforms_(std::move(pfs)) {
     make_point_rtree();
   }
 
@@ -40,10 +41,10 @@ private:
   void make_point_rtree();
 
   // Returns a list of platforms within a radius around the given coordinate.
-  [[maybe_unused]] platforms get_platforms_in_radius(geo::latlng const&,
-                                                     double const) const;
+  [[maybe_unused]] std::vector<platform> get_platforms_in_radius(
+      geo::latlng const&, double const) const;
 
-  platforms platforms_;
+  std::vector<platform> platforms_;
   geo::point_rtree platform_index_;
 };
 
