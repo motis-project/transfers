@@ -52,7 +52,7 @@ void storage_updater::partial_update(transfers::first_update const first,
     case routing_type::kNoRouting: break;
     case routing_type::kPartialRouting:
       // do not load ppr graph if there are no routing requests
-      if (storage_.has_transfer_requests_keys(
+      if (storage_.has_transfer_requests_by_keys(
               data_request_type::kPartialUpdate)) {
         break;
       }
@@ -96,15 +96,14 @@ void storage_updater::match_and_store_matches_by_distance() {
 
 void storage_updater::generate_and_store_transfer_requests(
     bool const old_to_old) {
-  auto const treq_gen_data =
-      storage_.get_transfer_request_keys_generation_data();
+  auto const treq_gen_data = storage_.get_transfer_request_generation_data();
 
   progress_tracker_->status("Generate Transfer Requests.")
       .out_bounds(15.F, 30.F)
       .in_high(4 * treq_gen_data.profile_key_to_search_profile_.size());
-  storage_.add_new_transfer_requests_keys(
-      std::move(generate_transfer_requests_keys(
-          storage_.get_transfer_request_keys_generation_data(),
+  storage_.add_new_transfer_requests_by_keys(
+      std::move(generate_all_pair_transfer_requests_by_keys(
+          storage_.get_transfer_request_generation_data(),
           {.old_to_old_ = old_to_old})));
 }
 
@@ -118,7 +117,7 @@ void storage_updater::generate_and_store_transfer_results(
                              : ::ppr::rtree_options::PREFETCH);
 
   auto treqs =
-      to_transfer_requests(storage_.get_transfer_requests_keys(request_type),
+      to_transfer_requests(storage_.get_transfer_requests_by_keys(request_type),
                            storage_.get_all_matchings());
 
   progress_tracker_->status("Generate Transfer Results.")

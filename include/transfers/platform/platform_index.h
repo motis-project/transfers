@@ -13,7 +13,7 @@ namespace transfers {
 
 struct platform_index {
 
-  explicit platform_index(std::vector<platform>& pfs)
+  explicit platform_index(std::vector<platform> pfs)
       : platforms_(std::move(pfs)) {
     make_point_rtree();
   }

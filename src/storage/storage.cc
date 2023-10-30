@@ -47,28 +47,29 @@ hash_map<nlocation_key_t, platform> storage::get_all_matchings() {
   return all_matchings;
 }
 
-bool storage::has_transfer_requests_keys(data_request_type req_type) {
-  return get_transfer_requests_keys(req_type).empty();
+bool storage::has_transfer_requests_by_keys(data_request_type const req_type) {
+  return get_transfer_requests_by_keys(req_type).empty();
 }
 
-transfer_requests_keys storage::get_transfer_requests_keys(
+std::vector<transfer_request_by_keys> storage::get_transfer_requests_by_keys(
     data_request_type const req_type) {
   switch (req_type) {
     case data_request_type::kPartialOld:
-      return old_state_.transfer_requests_keys_;
+      return old_state_.transfer_requests_by_keys_;
     case data_request_type::kPartialUpdate:
-      return update_state_.transfer_requests_keys_;
+      return update_state_.transfer_requests_by_keys_;
     case data_request_type::kFull:
-      auto full = old_state_.transfer_requests_keys_;
-      full.insert(full.end(), update_state_.transfer_requests_keys_.begin(),
-                  update_state_.transfer_requests_keys_.end());
+      auto full = old_state_.transfer_requests_by_keys_;
+      full.insert(full.end(), update_state_.transfer_requests_by_keys_.begin(),
+                  update_state_.transfer_requests_by_keys_.end());
       return full;
   }
 
   return {};
 }
 
-treq_k_generation_data storage::get_transfer_request_keys_generation_data() {
+transfer_request_generation_data
+storage::get_transfer_request_generation_data() {
   return {{*(old_state_.matched_pfs_idx_), old_state_.nloc_keys_,
            old_state_.set_matched_pfs_idx_},
           {*(update_state_.matched_pfs_idx_), update_state_.nloc_keys_,
@@ -112,10 +113,10 @@ void storage::add_new_matching_results(matching_results const mrs) {
   update_state_.set_matched_pfs_idx_ = true;
 }
 
-void storage::add_new_transfer_requests_keys(
-    transfer_requests_keys const treqs_k) {
-  auto const updated_in_db = db_.update_transfer_requests_keys(treqs_k);
-  auto const added_to_db = db_.put_transfer_requests_keys(treqs_k);
+void storage::add_new_transfer_requests_by_keys(
+    std::vector<transfer_request_by_keys> const treqs_k) {
+  auto const updated_in_db = db_.update_transfer_requests_by_keys(treqs_k);
+  auto const added_to_db = db_.put_transfer_requests_by_keys(treqs_k);
 
   auto const updated_treqs_k =
       utl::all(updated_in_db) |
@@ -126,11 +127,11 @@ void storage::add_new_transfer_requests_keys(
       utl::transform([&treqs_k](auto const i) { return treqs_k[i]; }) |
       utl::vec();
 
-  auto result = transfer_requests_keys{};
+  auto result = std::vector<transfer_request_by_keys>{};
   result.insert(result.end(), updated_treqs_k.begin(), updated_treqs_k.end());
   result.insert(result.end(), new_treqs_k.begin(), new_treqs_k.end());
 
-  update_state_.transfer_requests_keys_ = result;
+  update_state_.transfer_requests_by_keys_ = result;
 }
 
 void storage::add_new_transfer_results(transfer_results const tres) {
@@ -157,8 +158,8 @@ void storage::load_old_state_from_db(set<profile_key_t> const& profile_keys) {
       std::make_unique<platform_index>(platform_index{old_pfs});
   old_state_.set_pfs_idx_ = true;
   old_state_.matches_ = db_.get_loc_to_pf_matchings();
-  old_state_.transfer_requests_keys_ =
-      db_.get_transfer_requests_keys(profile_keys);
+  old_state_.transfer_requests_by_keys_ =
+      db_.get_transfer_requests_by_keys(profile_keys);
   old_state_.transfer_results_ = db_.get_transfer_results(profile_keys);
 
   auto matched_pfs = std::vector<platform>{};

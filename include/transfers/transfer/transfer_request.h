@@ -11,15 +11,19 @@
 
 namespace transfers {
 
-struct transfer_request_keys {
+struct transfer_request_by_keys {
+  friend std::ostream& operator<<(std::ostream&,
+                                  transfer_request_by_keys const&);
+
   CISTA_COMPARABLE();
   nlocation_key_t from_nloc_key_;
   vector<nlocation_key_t> to_nloc_keys_;
   profile_key_t profile_;
 };
-using transfer_requests_keys = std::vector<transfer_request_keys>;
 
 struct transfer_request {
+  friend std::ostream& operator<<(std::ostream&, transfer_request const&);
+
   platform transfer_start_;
   nlocation_key_t from_nloc_key_;
 
@@ -28,10 +32,9 @@ struct transfer_request {
 
   profile_key_t profile_;
 };
-using transfer_requests = std::vector<transfer_request>;
 
-struct treq_k_generation_data {
-  struct matched_nloc_pf_data {
+struct transfer_request_generation_data {
+  struct matched_nigiri_location_data {
     platform_index const& matched_pfs_idx_;
     vector<nlocation_key_t> const& nloc_keys_;
     bool set_matched_pfs_idx_;
@@ -52,8 +55,9 @@ struct transfer_request_options {
 // matched platform.
 // Requirement: X must only contain nigiri locations that have
 // been successfully matched to an OSM platform.
-transfer_requests to_transfer_requests(
-    transfer_requests_keys const&, hash_map<nlocation_key_t, platform> const&);
+std::vector<transfer_request> to_transfer_requests(
+    std::vector<transfer_request_by_keys> const&,
+    hash_map<nlocation_key_t, platform> const&);
 
 // Generates new `transfer_request_keys` based on matched platforms in the old
 // and update state. List of `transfer_request_keys` are always created for the
@@ -69,8 +73,9 @@ transfer_requests to_transfer_requests(
 // `transfer_request_keys` is necessary if the profiles (from PPR) necessary for
 // the creation of the `transfer_request_keys` have changed (compared to
 // previous applications).
-transfer_requests_keys generate_transfer_requests_keys(
-    treq_k_generation_data const&, transfer_request_options const&);
+std::vector<transfer_request_by_keys>
+generate_all_pair_transfer_requests_by_keys(
+    transfer_request_generation_data const&, transfer_request_options const&);
 
 // Returns the new merged `transfer_request_keys` struct.
 // Default values used from `lhs` struct.
@@ -79,18 +84,15 @@ transfer_requests_keys generate_transfer_requests_keys(
 // Merge Prerequisites:
 // - both `transfer_request_keys` structs have the same `from_nloc_key_`
 // - both `transfer_request_keys` structs have the same `profile_key_t`
-transfer_request_keys merge(transfer_request_keys const& /* lhs */,
-                            transfer_request_keys const& /* rhs */);
+transfer_request_by_keys merge(transfer_request_by_keys const& /* lhs */,
+                               transfer_request_by_keys const& /* rhs */);
 
 // Returns a unique string representation of the given `transfer_request_keys`
 // struct.
-string_t to_key(transfer_request_keys const&);
+string_t to_key(transfer_request_by_keys const&);
 
 // Returns a unique string representation of the given `transfer_request`
 // struct.
 string_t to_key(transfer_request const&);
-
-std::ostream& operator<<(std::ostream&, transfer_request const&);
-std::ostream& operator<<(std::ostream&, transfer_request_keys const&);
 
 }  // namespace transfers

@@ -52,8 +52,7 @@ void database::init() {
   txn.commit();
 }
 
-std::vector<std::size_t> database::put_profiles(
-    std::vector<string_t> const& prf_names) {
+void database::put_profiles(std::vector<string_t> const& prf_names) {
   auto added_indices = std::vector<std::size_t>{};
 
   auto txn = lmdb::txn{env_};
@@ -70,7 +69,6 @@ std::vector<std::size_t> database::put_profiles(
   }
 
   txn.commit();
-  return added_indices;
 }
 
 hash_map<string_t, profile_key_t> database::get_profile_keys() {
@@ -223,8 +221,8 @@ hash_map<nlocation_key_t, platform> database::get_loc_to_pf_matchings() {
   return loc_pf_matchings;
 }
 
-std::vector<std::size_t> database::put_transfer_requests_keys(
-    transfer_requests_keys const& treqs_k) {
+std::vector<std::size_t> database::put_transfer_requests_by_keys(
+    std::vector<transfer_request_by_keys> const& treqs_k) {
   auto added_indices = std::vector<std::size_t>{};
 
   auto txn = lmdb::txn{env_};
@@ -249,10 +247,10 @@ std::vector<std::size_t> database::put_transfer_requests_keys(
 /**
  * merge and update: transfer_request_keys in db
  */
-std::vector<std::size_t> database::update_transfer_requests_keys(
-    transfer_requests_keys const& treqs_k) {
+std::vector<std::size_t> database::update_transfer_requests_by_keys(
+    std::vector<transfer_request_by_keys> const& treqs_k) {
   auto updated_indices = std::vector<std::size_t>{};
-  auto treq_chashing = cista::hashing<transfer_request_keys>{};
+  auto treq_chashing = cista::hashing<transfer_request_by_keys>{};
 
   auto txn = lmdb::txn{env_};
   auto transreqs_db = transreqs_dbi(txn);
@@ -266,7 +264,7 @@ std::vector<std::size_t> database::update_transfer_requests_keys(
 
     auto entry = txn.get(transreqs_db, treq_key);
     auto treq_from_db =
-        cista::copy_from_potentially_unaligned<transfer_request_keys>(
+        cista::copy_from_potentially_unaligned<transfer_request_by_keys>(
             entry.value());
     auto merged = merge(treq_from_db, treq);
 
@@ -287,9 +285,9 @@ std::vector<std::size_t> database::update_transfer_requests_keys(
   return updated_indices;
 }
 
-transfer_requests_keys database::get_transfer_requests_keys(
-    set<profile_key_t> const& ppr_profile_names) {
-  auto treqs_k = transfer_requests_keys{};
+std::vector<transfer_request_by_keys> database::get_transfer_requests_by_keys(
+    set<profile_key_t> const& ppr_profiles) {
+  auto treqs_k = std::vector<transfer_request_by_keys>{};
 
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto transreqs_db = transreqs_dbi(txn);
@@ -298,11 +296,11 @@ transfer_requests_keys database::get_transfer_requests_keys(
 
   while (entry.has_value()) {
     auto const db_treq_k =
-        cista::copy_from_potentially_unaligned<transfer_request_keys>(
+        cista::copy_from_potentially_unaligned<transfer_request_by_keys>(
             entry->second);
 
     // extract only transfer_requests with requested profiles
-    if (ppr_profile_names.count(db_treq_k.profile_) == 1) {
+    if (ppr_profiles.count(db_treq_k.profile_) == 1) {
       treqs_k.emplace_back(db_treq_k);
     }
 

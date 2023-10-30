@@ -24,7 +24,7 @@ struct database {
                     std::size_t const db_max_size);
 
   // profiles
-  std::vector<std::size_t> put_profiles(std::vector<string_t> const&);
+  void put_profiles(std::vector<string_t> const&);
   hash_map<string_t, profile_key_t> get_profile_keys();
   hash_map<profile_key_t, string_t> get_profile_key_to_name();
 
@@ -37,11 +37,12 @@ struct database {
   hash_map<nlocation_key_t, platform> get_loc_to_pf_matchings();
 
   // transfer requests
-  std::vector<std::size_t> put_transfer_requests_keys(
-      transfer_requests_keys const&);
-  std::vector<std::size_t> update_transfer_requests_keys(
-      transfer_requests_keys const&);
-  transfer_requests_keys get_transfer_requests_keys(set<profile_key_t> const&);
+  std::vector<std::size_t> put_transfer_requests_by_keys(
+      std::vector<transfer_request_by_keys> const&);
+  std::vector<std::size_t> update_transfer_requests_by_keys(
+      std::vector<transfer_request_by_keys> const&);
+  std::vector<transfer_request_by_keys> get_transfer_requests_by_keys(
+      set<profile_key_t> const&);
 
   // transfer results
   std::vector<std::size_t> put_transfer_results(transfer_results const&);

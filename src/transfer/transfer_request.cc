@@ -9,10 +9,10 @@
 
 namespace transfers {
 
-transfer_requests to_transfer_requests(
-    transfer_requests_keys const& treqs_k,
+std::vector<transfer_request> to_transfer_requests(
+    std::vector<transfer_request_by_keys> const& treqs_k,
     hash_map<nlocation_key_t, platform> const& matches) {
-  auto treqs = transfer_requests{};
+  auto treqs = std::vector<transfer_request>{};
 
   for (auto const& treq_k : treqs_k) {
     auto treq = transfer_request{};
@@ -35,16 +35,21 @@ transfer_requests to_transfer_requests(
   return treqs;
 }
 
-transfer_requests_keys generate_transfer_requests_keys(
-    treq_k_generation_data const& data, transfer_request_options const& opts) {
-  auto result = transfer_requests_keys{};
+std::vector<transfer_request_by_keys>
+generate_all_pair_transfer_requests_by_keys(
+    transfer_request_generation_data const& data,
+    transfer_request_options const& opts) {
+  auto result = std::vector<transfer_request_by_keys>{};
   auto const profiles = data.profile_key_to_search_profile_;
 
   auto const all_pairs_trs =
-      [&profiles](treq_k_generation_data::matched_nloc_pf_data const& from,
-                  treq_k_generation_data::matched_nloc_pf_data const& to,
-                  profile_key_t const& prf_key) {
-        auto from_to_trs = transfer_requests_keys{};
+      [&profiles](
+          transfer_request_generation_data::matched_nigiri_location_data const&
+              from,
+          transfer_request_generation_data::matched_nigiri_location_data const&
+              to,
+          profile_key_t const& prf_key) {
+        auto from_to_trs = std::vector<transfer_request_by_keys>{};
         auto const& profile = profiles.at(prf_key);
         auto prf_dist = profile.walking_speed_ * profile.duration_limit_;
 
@@ -64,7 +69,7 @@ transfer_requests_keys generate_transfer_requests_keys(
             continue;
           }
 
-          auto tmp = transfer_request_keys{};
+          auto tmp = transfer_request_by_keys{};
           auto to_nloc_keys = vector<nlocation_key_t>{};
 
           for (auto t_id : target_ids) {
@@ -115,9 +120,9 @@ transfer_requests_keys generate_transfer_requests_keys(
   return result;
 }
 
-transfer_request_keys merge(transfer_request_keys const& lhs,
-                            transfer_request_keys const& rhs) {
-  auto merged = transfer_request_keys{};
+transfer_request_by_keys merge(transfer_request_by_keys const& lhs,
+                               transfer_request_by_keys const& rhs) {
+  auto merged = transfer_request_by_keys{};
   auto added_to_nlocs = set<nlocation_key_t>{};
 
   utl::verify(
@@ -149,7 +154,7 @@ transfer_request_keys merge(transfer_request_keys const& lhs,
   return merged;
 }
 
-string_t to_key(transfer_request_keys const& treq_k) {
+string_t to_key(transfer_request_by_keys const& treq_k) {
   return {fmt::format("{}{}", treq_k.from_nloc_key_, treq_k.profile_)};
 }
 
@@ -164,7 +169,7 @@ std::ostream& operator<<(std::ostream& out, transfer_request const& treq) {
 }
 
 std::ostream& operator<<(std::ostream& out,
-                         transfer_request_keys const& treq_k) {
+                         transfer_request_by_keys const& treq_k) {
   auto treq_k_repr = fmt::format("[transfer request keys] {} has {} locations.",
                                  to_key(treq_k), treq_k.to_nloc_keys_.size());
   return out << treq_k_repr;

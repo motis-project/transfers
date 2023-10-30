@@ -48,17 +48,18 @@ struct storage {
   // platforms. Combines old and new matchings.
   hash_map<nlocation_key_t, platform> get_all_matchings();
 
-  // Returns whether the storage contains `transfer_requests_keys` for the
-  // corresponding `data_request_type`.
-  bool has_transfer_requests_keys(data_request_type const);
+  // Returns whether the storage contains a list of `transfer_request_by_keys`
+  // for the corresponding `data_request_type`.
+  bool has_transfer_requests_by_keys(data_request_type const);
 
   // Returns for the given `data_request_type` a list of
-  // `transfer_requests_keys` which are stored in the storage.
-  transfer_requests_keys get_transfer_requests_keys(data_request_type const);
+  // `transfer_request_by_keys` which are stored in the storage.
+  std::vector<transfer_request_by_keys> get_transfer_requests_by_keys(
+      data_request_type const);
 
   // Returns a `treq_k_generation_data` struct containing all the data used
   // during the generation of `transfer_request_keys`.
-  treq_k_generation_data get_transfer_request_keys_generation_data();
+  transfer_request_generation_data get_transfer_request_generation_data();
 
   // --- public db api ---
 
@@ -82,7 +83,8 @@ struct storage {
   // (described by the given transfer_request_keys is added to the
   // `update_state_` state struct.
   // Update merges the old transfer request keys with the new one.
-  void add_new_transfer_requests_keys(transfer_requests_keys const);
+  void add_new_transfer_requests_by_keys(
+      std::vector<transfer_request_by_keys> const);
 
   // Adds new transfer results to the database. Previously unknown transfer
   // results are added to the `update_state_` state struct. Previously known
@@ -128,7 +130,7 @@ private:
 
     // mapping matched nloc to pf
     hash_map<nlocation_key_t, platform> matches_;
-    transfer_requests_keys transfer_requests_keys_;
+    std::vector<transfer_request_by_keys> transfer_requests_by_keys_;
     transfer_results transfer_results_;
   } old_state_, update_state_;
 

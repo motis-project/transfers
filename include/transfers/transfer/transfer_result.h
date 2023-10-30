@@ -41,7 +41,7 @@ transfer_result route_single_request(
 // Equivalent: Calls `route_single_request` for every
 // `transfer_request`.
 transfer_results route_multiple_requests(
-    transfer_requests const&, ::ppr::routing_graph const&,
+    std::vector<transfer_request> const&, ::ppr::routing_graph const&,
     hash_map<profile_key_t, ::ppr::routing::search_profile> const&);
 
 // Returns a new merged `transfer_result` struct.

@@ -99,7 +99,7 @@ transfer_result route_single_request(
 }
 
 transfer_results route_multiple_requests(
-    transfer_requests const& treqs, ::ppr::routing_graph const& rg,
+    std::vector<transfer_request> const& treqs, ::ppr::routing_graph const& rg,
     hash_map<profile_key_t, pr::search_profile> const& profiles) {
   auto result = transfer_results{};
 
