@@ -78,7 +78,7 @@ void osm_platform_extractor::platform_handler::area(osmium::Area const& area) {
 
 void osm_platform_extractor::platform_handler::add_platform(
     osm_type const type, osmium::object_id_type const id,
-    osmium::geom::Coordinates const& coord, strings_t const& names,
+    osmium::geom::Coordinates const& coord, vector<string_t> const& names,
     bool is_bus_stop) {
   platforms_.emplace_back(
       platform{geo::latlng{coord.y, coord.x}, id, type, names, is_bus_stop});
@@ -94,7 +94,7 @@ bool osm_platform_extractor::platform_handler::platform_is_bus_stop(
   return (tag_list.has_tag("highway", "bus_stop"));
 }
 
-strings_t osm_platform_extractor::platform_handler::get_platform_names(
+vector<string_t> osm_platform_extractor::platform_handler::get_platform_names(
     osmium::TagList const& tag_list) {
   auto const default_value = string_t{"n/a"};
 
@@ -109,7 +109,7 @@ strings_t osm_platform_extractor::platform_handler::get_platform_names(
       }) |
       utl::vec();
 
-  auto names = strings_t{};
+  auto names = vector<string_t>{};
   for (auto const& name : vector_names) {
     names.emplace_back(name);
   }

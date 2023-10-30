@@ -78,14 +78,14 @@ generate_all_pair_transfer_requests_by_keys(
     transfer_request_generation_data const&, transfer_request_options const&);
 
 // Returns the new merged `transfer_request_keys` struct.
-// Default values used from `lhs` struct.
+// Default values used from `a` struct.
 // Adds `to_nloc_keys_` from `rhs` if `nloc_key` is not yet considered over.
-// `lhs`.
+// `a`.
 // Merge Prerequisites:
 // - both `transfer_request_keys` structs have the same `from_nloc_key_`
 // - both `transfer_request_keys` structs have the same `profile_key_t`
-transfer_request_by_keys merge(transfer_request_by_keys const& /* lhs */,
-                               transfer_request_by_keys const& /* rhs */);
+transfer_request_by_keys merge(transfer_request_by_keys const& /* a */,
+                               transfer_request_by_keys const& /* b */);
 
 // Returns a unique string representation of the given `transfer_request_keys`
 // struct.

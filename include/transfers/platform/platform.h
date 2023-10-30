@@ -19,7 +19,7 @@ struct platform {
   geo::latlng loc_;
   std::int64_t osm_id_{-1};
   osm_type osm_type_{osm_type::kNode};
-  strings_t names_;
+  vector<string_t> names_;
   bool is_bus_stop_{false};
 };
 

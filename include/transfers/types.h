@@ -36,7 +36,6 @@ using nlocation_key_t = std::uint64_t;
 using profile_key_t = std::uint8_t;
 
 using string_t = cista::offset::string;
-using strings_t = cista::offset::vector<string_t>;
 
 // Returns a unique  nigiri location coordinate representation
 // Interprets longitude and latitude as 32b float values. Appends them to each

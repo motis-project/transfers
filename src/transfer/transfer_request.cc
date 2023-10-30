@@ -120,21 +120,21 @@ generate_all_pair_transfer_requests_by_keys(
   return result;
 }
 
-transfer_request_by_keys merge(transfer_request_by_keys const& lhs,
-                               transfer_request_by_keys const& rhs) {
+transfer_request_by_keys merge(transfer_request_by_keys const& a,
+                               transfer_request_by_keys const& b) {
   auto merged = transfer_request_by_keys{};
   auto added_to_nlocs = set<nlocation_key_t>{};
 
   utl::verify(
-      lhs.from_nloc_key_ == rhs.from_nloc_key_,
+      a.from_nloc_key_ == b.from_nloc_key_,
       "Cannot merge two transfer requests from different nigiri locations.");
-  utl::verify(lhs.profile_ == rhs.profile_,
+  utl::verify(a.profile_ == b.profile_,
               "Cannot merge two transfer requests with different profiles");
 
-  merged.from_nloc_key_ = lhs.from_nloc_key_;
-  merged.profile_ = lhs.profile_;
+  merged.from_nloc_key_ = a.from_nloc_key_;
+  merged.profile_ = a.profile_;
 
-  merged.to_nloc_keys_ = lhs.to_nloc_keys_;
+  merged.to_nloc_keys_ = a.to_nloc_keys_;
 
   // build added_keys set
   for (auto const& nloc_key : merged.to_nloc_keys_) {
@@ -142,7 +142,7 @@ transfer_request_by_keys merge(transfer_request_by_keys const& lhs,
   }
 
   // insert new and unique nloc/pf keys
-  for (auto nloc_key : rhs.to_nloc_keys_) {
+  for (auto nloc_key : b.to_nloc_keys_) {
     if (added_to_nlocs.count(nloc_key) == 1) {
       continue;
     }
