@@ -23,8 +23,11 @@
 namespace transfers {
 
 struct osm_platform_extractor {
-  explicit osm_platform_extractor(std::filesystem::path const& osm_file_path)
-      : osm_file_{osm_file_path.c_str()} {
+  explicit osm_platform_extractor(std::filesystem::path const& osm_file_path,
+                                  osmium::TagsFilter const& filter,
+                                  std::vector<std::string> const& name_tags)
+      : osm_file_{osm_file_path.c_str()},
+        platform_handler_(platform_handler(filter, name_tags)) {
     osmium::relations::read_relations(osm_file_, mp_manager_);
   }
 
@@ -35,13 +38,6 @@ struct osm_platform_extractor {
   // - `!filter_.empty() && !osm_name_tag_keys_.empty()` evaluates to true.
   std::vector<platform> get_platforms_identified_in_osm_file();
 
-  // Adds a rule according to which the platforms should be extracted from the
-  // OSM file.
-  void add_filter_rule(bool const, std::string const&, std::string const&);
-
-  // Adds a key that will be searched for in the tag list for a name.
-  void add_platform_name_tag_key(std::string const&);
-
 private:
   // Returns the center coordinate of a list of osm node references by
   // calculating the mean of the longitude and latitude of all given coords.
@@ -50,9 +46,11 @@ private:
   static osmium::geom::Coordinates calc_center(osmium::NodeRefList const&);
 
   struct platform_handler : public osmium::handler::Handler {
+    platform_handler(osmium::TagsFilter filter,
+                     std::vector<std::string> name_tags)
+        : filter_(std::move(filter)), name_tags_(std::move(name_tags)) {}
+
     std::vector<platform> platforms_;
-    osmium::TagsFilter filter_{false};
-    std::vector<std::string> osm_name_tag_keys_;
 
     // Handler command for handling platforms described as osm nodes.
     void node(osmium::Node const&);
@@ -82,6 +80,9 @@ private:
     // Returns a list of known and unique osm names of the given osm platform
     // described with a tag list.
     strings_t get_platform_names(osmium::TagList const&);
+
+    osmium::TagsFilter filter_;
+    std::vector<std::string> name_tags_;
   } platform_handler_;
 
   osmium::io::File osm_file_;

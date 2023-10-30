@@ -14,13 +14,6 @@ namespace transfers {
 
 std::vector<platform>
 osm_platform_extractor::get_platforms_identified_in_osm_file() {
-  utl::verify(!platform_handler_.filter_.empty(),
-              "No filter rule has been set to identify platforms in the osm "
-              "file. To add a filter rule, use `add_filter_rule(...)`.");
-  utl::verify(!platform_handler_.osm_name_tag_keys_.empty(),
-              "No osm platform name tag key has been set. To add a key, use "
-              "`add_platform_name_tag_key(...)`.");
-
   osmium::index::map::FlexMem<osmium::unsigned_object_id_type, osmium::Location>
       flexmemory;
   osmium::handler::NodeLocationsForWays<typeof(flexmemory)>
@@ -35,16 +28,6 @@ osm_platform_extractor::get_platforms_identified_in_osm_file() {
   reader.close();
 
   return platform_handler_.platforms_;
-}
-
-void osm_platform_extractor::add_filter_rule(const bool result,
-                                             std::string const& key_matcher,
-                                             std::string const& value_matcher) {
-  platform_handler_.filter_.add_rule(result, key_matcher, value_matcher);
-}
-
-void osm_platform_extractor::add_platform_name_tag_key(const std::string& key) {
-  platform_handler_.osm_name_tag_keys_.emplace_back(key);
 }
 
 osmium::geom::Coordinates osm_platform_extractor::calc_center(
@@ -116,7 +99,7 @@ strings_t osm_platform_extractor::platform_handler::get_platform_names(
   auto const default_value = string_t{"n/a"};
 
   auto vector_names =
-      utl::all(osm_name_tag_keys_) |
+      utl::all(name_tags_) |
       utl::transform([&tag_list, &default_value](auto const& key) {
         return string_t{tag_list.get_value_by_key(key.c_str(),
                                                   default_value.str().c_str())};
