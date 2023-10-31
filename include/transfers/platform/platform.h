@@ -16,17 +16,17 @@ enum class osm_type { kNode, kWay, kRelation, kUnknown };
 char get_osm_type_as_char(osm_type const);
 
 struct platform {
+  bool operator==(platform const& other) const;
+
+  // Returns a short and unique `platform` representation that can be used as a
+  // database id/key.
+  string_t key() const;
+
   geo::latlng loc_;
   std::int64_t osm_id_{-1};
   osm_type osm_type_{osm_type::kNode};
   vector<string_t> names_;
   bool is_bus_stop_{false};
 };
-
-// Returns a string representation of the given platform.
-string_t to_key(platform const&);
-
-// platform equal operator
-bool operator==(platform const& a, platform const& b);
 
 }  // namespace transfers

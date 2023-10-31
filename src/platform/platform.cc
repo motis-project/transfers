@@ -1,6 +1,7 @@
 #include "transfers/platform/platform.h"
 
-#include "fmt/core.h"
+#include <cstring>
+#include <string>
 
 namespace transfers {
 
@@ -14,13 +15,19 @@ char get_osm_type_as_char(osm_type const type) {
   }
 }
 
-string_t to_key(platform const& pf) {
-  return {fmt::format("{}:{}", std::to_string(pf.osm_id_),
-                      get_osm_type_as_char(pf.osm_type_))};
+string_t platform::key() const {
+  auto key = std::string{};
+
+  // platform key: osm_type + osm_id
+  key.resize(sizeof(osm_type_) + sizeof(osm_id_));
+  std::memcpy(key.data(), &osm_type_, sizeof(osm_type_));
+  std::memcpy(key.data() + sizeof(osm_type_), &osm_id_, sizeof(osm_id_));
+
+  return string_t{key};
 }
 
-bool operator==(platform const& a, platform const& b) {
-  return a.osm_id_ == b.osm_id_ && a.osm_type_ == b.osm_type_;
+bool platform::operator==(platform const& other) const {
+  return osm_id_ == other.osm_id_ && osm_type_ == other.osm_type_;
 };
 
 }  // namespace transfers
