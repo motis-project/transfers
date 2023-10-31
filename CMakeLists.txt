@@ -60,7 +60,7 @@ file(GLOB_RECURSE transfers-files src/*.cc)
 add_library(transfers ${transfers-files})
 target_include_directories(transfers PUBLIC include)
 target_link_libraries(transfers PUBLIC cista geo lmdb nigiri osmium ppr-routing utl)
-target_compile_features(transfers PUBLIC cxx_std_20)
+target_compile_features(transfers PUBLIC cxx_std_23)
 target_compile_options(transfers PRIVATE ${transfers_compule-options})
 
 # --- TEST ---

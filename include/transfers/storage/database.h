@@ -39,7 +39,7 @@ struct database {
 
   // matchings
   std::vector<std::size_t> put_matching_results(matching_results const&);
-  hash_map<nlocation_key_t, platform> get_loc_to_pf_matchings();
+  hash_map<location_key_t, platform> get_loc_to_pf_matchings();
 
   // transfer requests
   std::vector<std::size_t> put_transfer_requests_by_keys(
@@ -70,7 +70,7 @@ private:
 
   void init();
 
-  std::vector<std::pair<nlocation_key_t, string_t>> get_matchings();
+  std::vector<std::pair<location, string_t>> get_matchings();
   std::optional<platform> get_platform(string_t const& /* osm_key */);
 
   lmdb::env mutable env_;

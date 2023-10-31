@@ -46,7 +46,7 @@ struct storage {
 
   // Returns a map of all known matchings of nigiri locations to osm extracted
   // platforms. Combines old and new matchings.
-  hash_map<nlocation_key_t, platform> get_all_matchings();
+  hash_map<location_key_t, platform> get_all_matchings();
 
   // Returns whether the storage contains a list of `transfer_request_by_keys`
   // for the corresponding `data_request_type`.
@@ -126,10 +126,10 @@ private:
     bool set_pfs_idx_{false};
 
     // matched nigiri location keys
-    vector<nlocation_key_t> nloc_keys_;
+    vector<location> locs_;
 
     // mapping matched nloc to pf
-    hash_map<nlocation_key_t, platform> matches_{};
+    hash_map<location_key_t, platform> matches_{};
     std::vector<transfer_request_by_keys> transfer_requests_by_keys_{};
     std::vector<transfer_result> transfer_results_{};
   } old_state_, update_state_;

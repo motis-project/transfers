@@ -13,7 +13,7 @@ namespace transfers {
 struct matching_data {
   ::nigiri::timetable::locations const& locations_to_match_;
 
-  hash_map<nlocation_key_t, platform> const& already_matched_nloc_keys_;
+  hash_map<location_key_t, platform> const& already_matched_nloc_keys_;
 
   platform_index const& old_state_pf_idx_;
   platform_index const& update_state_pf_idx_;
@@ -28,7 +28,7 @@ struct matching_options {
 
 struct matching_result {
   platform pf_;
-  geo::latlng nloc_pos_;
+  location loc_;
 };
 using matching_results = std::vector<matching_result>;
 

@@ -36,7 +36,7 @@ matching_data storage::get_matching_data() {
           *(update_state_.pfs_idx_), update_state_.set_pfs_idx_};
 }
 
-hash_map<nlocation_key_t, platform> storage::get_all_matchings() {
+hash_map<location_key_t, platform> storage::get_all_matchings() {
   auto all_matchings = old_state_.matches_;
   all_matchings.insert(update_state_.matches_.begin(),
                        update_state_.matches_.end());
@@ -66,9 +66,9 @@ std::vector<transfer_request_by_keys> storage::get_transfer_requests_by_keys(
 
 transfer_request_generation_data
 storage::get_transfer_request_generation_data() {
-  return {{*(old_state_.matched_pfs_idx_), old_state_.nloc_keys_,
+  return {{*(old_state_.matched_pfs_idx_), old_state_.locs_,
            old_state_.set_matched_pfs_idx_},
-          {*(update_state_.matched_pfs_idx_), update_state_.nloc_keys_,
+          {*(update_state_.matched_pfs_idx_), update_state_.locs_,
            update_state_.set_matched_pfs_idx_},
           profile_key_to_search_profile_};
 }
@@ -95,8 +95,8 @@ void storage::add_new_matching_results(matching_results const mrs) {
 
   auto matched_pfs = std::vector<platform>{};
   for (auto const& mr : new_mrs) {
-    update_state_.matches_.emplace(to_key(mr.nloc_pos_), mr.pf_);
-    update_state_.nloc_keys_.emplace_back(to_key(mr.nloc_pos_));
+    update_state_.matches_.emplace(mr.loc_.key(), mr.pf_);
+    update_state_.locs_.emplace_back(mr.loc_.key());
     matched_pfs.emplace_back(mr.pf_);
   }
 
@@ -145,12 +145,12 @@ void storage::load_old_state_from_db(set<profile_key_t> const& profile_keys) {
   old_state_.transfer_results_ = db_.get_transfer_results(profile_keys);
 
   auto matched_pfs = std::vector<platform>{};
-  auto matched_nloc_keys = vector<nlocation_key_t>{};
-  for (auto const& [k, pf] : old_state_.matches_) {
-    matched_nloc_keys.emplace_back(k);
+  auto matched_locs = vector<location>{};
+  for (auto const& [loc_key, pf] : old_state_.matches_) {
+    matched_locs.emplace_back(loc_key);
     matched_pfs.emplace_back(pf);
   }
-  old_state_.nloc_keys_ = matched_nloc_keys;
+  old_state_.locs_ = matched_locs;
   old_state_.matched_pfs_idx_ = std::make_unique<platform_index>(matched_pfs);
   old_state_.set_matched_pfs_idx_ = true;
 }

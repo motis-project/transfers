@@ -30,8 +30,8 @@ struct transfer_result {
   // used as a database id/key.
   string_t key() const;
 
-  nlocation_key_t from_nloc_key_;
-  vector<nlocation_key_t> to_nloc_keys_;
+  location_key_t from_loc_;
+  vector<location_key_t> to_locs_;
   profile_key_t profile_;
 
   vector<transfer_info> infos_;

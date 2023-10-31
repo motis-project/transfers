@@ -16,9 +16,9 @@ string_t transfer_request_by_keys::key() const {
   auto key = std::string{};
 
   // transfer_request_by_keys key: from location key + profile key
-  key.resize(sizeof(from_nloc_key_) + sizeof(profile_));
-  std::memcpy(key.data(), &from_nloc_key_, sizeof(from_nloc_key_));
-  std::memcpy(key.data() + sizeof(from_nloc_key_), &profile_, sizeof(profile_));
+  key.resize(sizeof(from_loc_) + sizeof(profile_));
+  std::memcpy(key.data(), &from_loc_, sizeof(from_loc_));
+  std::memcpy(key.data() + sizeof(from_loc_), &profile_, sizeof(profile_));
 
   return string_t{key};
 }
@@ -27,31 +27,31 @@ string_t transfer_request::key() const {
   auto key = std::string{};
 
   // transfer_request key: from location key + profile key
-  key.resize(sizeof(from_nloc_key_) + sizeof(profile_));
-  std::memcpy(key.data(), &from_nloc_key_, sizeof(from_nloc_key_));
-  std::memcpy(key.data() + sizeof(from_nloc_key_), &profile_, sizeof(profile_));
+  key.resize(sizeof(from_loc_) + sizeof(profile_));
+  std::memcpy(key.data(), &from_loc_, sizeof(from_loc_));
+  std::memcpy(key.data() + sizeof(from_loc_), &profile_, sizeof(profile_));
 
   return string_t{key};
 }
 
 std::vector<transfer_request> to_transfer_requests(
     std::vector<transfer_request_by_keys> const& treqs_k,
-    hash_map<nlocation_key_t, platform> const& matches) {
+    hash_map<location_key_t, platform> const& matches) {
   auto treqs = std::vector<transfer_request>{};
 
   for (auto const& treq_k : treqs_k) {
     auto treq = transfer_request{};
 
-    treq.from_nloc_key_ = treq_k.from_nloc_key_;
+    treq.from_loc_ = location(treq_k.from_loc_);
     treq.profile_ = treq_k.profile_;
 
     // extract from_pf
-    treq.transfer_start_ = matches.at(treq_k.from_nloc_key_);
+    treq.transfer_start_ = matches.at(treq_k.from_loc_);
 
     // extract to_pfs
-    for (auto to_nloc_key : treq_k.to_nloc_keys_) {
-      treq.transfer_targets_.emplace_back(matches.at(to_nloc_key));
-      treq.to_nloc_keys_.emplace_back(to_nloc_key);
+    for (auto to_loc_key : treq_k.to_locs_) {
+      treq.transfer_targets_.emplace_back(matches.at(to_loc_key));
+      treq.to_locs_.emplace_back(to_loc_key);
     }
 
     treqs.emplace_back(treq);
@@ -88,21 +88,21 @@ generate_all_pair_transfer_requests_by_keys(
           auto from_pf = from.matched_pfs_idx_.get_platform(i);
           auto target_ids = to.matched_pfs_idx_.get_other_platforms_in_radius(
               from_pf, prf_dist);
-          auto from_nloc_key = from.nloc_keys_[i];
+          auto from_loc_key = from.locs_[i].key();
 
           if (target_ids.empty()) {
             continue;
           }
 
           auto tmp = transfer_request_by_keys{};
-          auto to_nloc_keys = vector<nlocation_key_t>{};
+          auto to_loc_keys = vector<location_key_t>{};
 
           for (auto t_id : target_ids) {
-            to_nloc_keys.emplace_back(to.nloc_keys_[t_id]);
+            to_loc_keys.emplace_back(to.locs_[t_id].key());
           }
 
-          tmp.from_nloc_key_ = from_nloc_key;
-          tmp.to_nloc_keys_ = to_nloc_keys;
+          tmp.from_loc_ = from_loc_key;
+          tmp.to_locs_ = to_loc_keys;
           tmp.profile_ = prf_key;
 
           from_to_trs.emplace_back(tmp);
@@ -148,32 +148,32 @@ generate_all_pair_transfer_requests_by_keys(
 transfer_request_by_keys merge(transfer_request_by_keys const& a,
                                transfer_request_by_keys const& b) {
   auto merged = transfer_request_by_keys{};
-  auto added_to_nlocs = set<nlocation_key_t>{};
+  auto added_to_locs = set<location_key_t>{};
 
   utl::verify(
-      a.from_nloc_key_ == b.from_nloc_key_,
+      a.from_loc_ == b.from_loc_,
       "Cannot merge two transfer requests from different nigiri locations.");
   utl::verify(a.profile_ == b.profile_,
               "Cannot merge two transfer requests with different profiles");
 
-  merged.from_nloc_key_ = a.from_nloc_key_;
+  merged.from_loc_ = a.from_loc_;
   merged.profile_ = a.profile_;
 
-  merged.to_nloc_keys_ = a.to_nloc_keys_;
+  merged.to_locs_ = a.to_locs_;
 
   // build added_keys set
-  for (auto const& nloc_key : merged.to_nloc_keys_) {
-    added_to_nlocs.insert(nloc_key);
+  for (auto const& loc_key : merged.to_locs_) {
+    added_to_locs.emplace(loc_key);
   }
 
   // insert new and unique nloc/pf keys
-  for (auto nloc_key : b.to_nloc_keys_) {
-    if (added_to_nlocs.count(nloc_key) == 1) {
+  for (auto const loc_key : b.to_locs_) {
+    if (added_to_locs.count(loc_key) == 1) {
       continue;
     }
 
-    merged.to_nloc_keys_.emplace_back(nloc_key);
-    added_to_nlocs.insert(nloc_key);
+    merged.to_locs_.emplace_back(loc_key);
+    added_to_locs.emplace(loc_key);
   }
 
   return merged;
@@ -181,14 +181,14 @@ transfer_request_by_keys merge(transfer_request_by_keys const& a,
 
 std::ostream& operator<<(std::ostream& out, transfer_request const& treq) {
   auto treq_repr = fmt::format("[transfer request] {} has {} locations.",
-                               treq.key(), treq.to_nloc_keys_.size());
+                               treq.key(), treq.to_locs_.size());
   return out << treq_repr;
 }
 
 std::ostream& operator<<(std::ostream& out,
                          transfer_request_by_keys const& treq_k) {
   auto treq_k_repr = fmt::format("[transfer request keys] {} has {} locations.",
-                                 treq_k.key(), treq_k.to_nloc_keys_.size());
+                                 treq_k.key(), treq_k.to_locs_.size());
   return out << treq_k_repr;
 }
 

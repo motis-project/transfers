@@ -47,9 +47,9 @@ string_t transfer_result::key() const {
   auto key = std::string{};
 
   // transfer_result key: from location key + profile key
-  key.resize(sizeof(from_nloc_key_) + sizeof(profile_));
-  std::memcpy(key.data(), &from_nloc_key_, sizeof(from_nloc_key_));
-  std::memcpy(key.data() + sizeof(from_nloc_key_), &profile_, sizeof(profile_));
+  key.resize(sizeof(from_loc_) + sizeof(profile_));
+  std::memcpy(key.data(), &from_loc_, sizeof(from_loc_));
+  std::memcpy(key.data() + sizeof(from_loc_), &profile_, sizeof(profile_));
 
   return string_t{key};
 }
@@ -79,7 +79,7 @@ transfer_result route_single_request(
     transfer_request const& treq, ::ppr::routing_graph const& rg,
     hash_map<profile_key_t, pr::search_profile> const& profiles) {
   auto tres = transfer_result{};
-  tres.from_nloc_key_ = treq.from_nloc_key_;
+  tres.from_loc_ = treq.from_loc_.key();
   tres.profile_ = treq.profile_;
 
   auto const& rq = build_routing_query(profiles, treq);
@@ -101,7 +101,7 @@ transfer_result route_single_request(
       continue;
     }
 
-    tres.to_nloc_keys_.emplace_back(treq.to_nloc_keys_[i]);
+    tres.to_locs_.emplace_back(treq.to_locs_[i].key());
     tres.infos_.emplace_back(fwd_routes.front());
   }
 
@@ -130,39 +130,39 @@ std::vector<transfer_result> route_multiple_requests(
 
 transfer_result merge(transfer_result const& a, transfer_result const& b) {
   auto merged = transfer_result{};
-  auto added_to_nlocs = set<nlocation_key_t>{};
+  auto added_to_nlocs = set<location_key_t>{};
 
-  utl::verify(a.from_nloc_key_ == b.from_nloc_key_,
+  utl::verify(a.from_loc_ == b.from_loc_,
               "Cannot merge two transfer results from different locations.");
   utl::verify(a.profile_ == b.profile_,
               "Cannot merge two transfer results with different profiles.");
-  utl::verify(a.to_nloc_keys_.size() == a.infos_.size(),
+  utl::verify(a.to_locs_.size() == a.infos_.size(),
               "(A) Cannot merge transfer results with invalid target and info "
               "matching.");
-  utl::verify(b.to_nloc_keys_.size() == b.infos_.size(),
+  utl::verify(b.to_locs_.size() == b.infos_.size(),
               "(B) Cannot merge transfer results with invalid target and info "
               "matching.");
 
-  merged.from_nloc_key_ = a.from_nloc_key_;
+  merged.from_loc_ = a.from_loc_;
   merged.profile_ = a.profile_;
 
-  merged.to_nloc_keys_ = a.to_nloc_keys_;
+  merged.to_locs_ = a.to_locs_;
   merged.infos_ = a.infos_;
 
   // build added_to_nlocs set
-  for (auto const& nloc_key : merged.to_nloc_keys_) {
-    added_to_nlocs.insert(nloc_key);
+  for (auto const loc_key : merged.to_locs_) {
+    added_to_nlocs.insert(loc_key);
   }
 
   // insert new and unique nloc/info keys
-  for (auto const [nloc_key, info] : utl::zip(b.to_nloc_keys_, b.infos_)) {
-    if (added_to_nlocs.count(nloc_key) == 1) {
+  for (auto const& [loc_key, info] : utl::zip(b.to_locs_, b.infos_)) {
+    if (added_to_nlocs.count(loc_key) == 1) {
       continue;
     }
 
-    merged.to_nloc_keys_.emplace_back(nloc_key);
+    merged.to_locs_.emplace_back(loc_key);
     merged.infos_.emplace_back(info);
-    added_to_nlocs.insert(nloc_key);
+    added_to_nlocs.emplace(loc_key);
   }
 
   return merged;

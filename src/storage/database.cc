@@ -180,17 +180,17 @@ std::vector<size_t> database::put_matching_results(
   auto platforms_db = platforms_dbi(txn);
 
   for (auto const& [idx, mr] : utl::enumerate(mrs)) {
-    auto const nloc_key = to_key(mr.nloc_pos_);
+    auto const loc_key = mr.loc_.key();
     auto const osm_key = mr.pf_.key();
 
-    if (auto const r = txn.get(matchings_db, nloc_key); r.has_value()) {
+    if (auto const r = txn.get(matchings_db, loc_key); r.has_value()) {
       continue;  // nloc already matched in db
     }
     if (auto const r = txn.get(platforms_db, osm_key); !r.has_value()) {
       continue;  // osm platform not in platform_db
     }
 
-    txn.put(matchings_db, nloc_key, osm_key);
+    txn.put(matchings_db, loc_key, osm_key);
     added_indices.emplace_back(idx);
   }
 
@@ -198,8 +198,8 @@ std::vector<size_t> database::put_matching_results(
   return added_indices;
 }
 
-std::vector<std::pair<nlocation_key_t, string_t>> database::get_matchings() {
-  auto matchings = std::vector<std::pair<nlocation_key_t, string_t>>{};
+std::vector<std::pair<location, string_t>> database::get_matchings() {
+  auto matchings = std::vector<std::pair<location, string_t>>{};
 
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto matchings_db = matchings_dbi(txn);
@@ -213,7 +213,8 @@ std::vector<std::pair<nlocation_key_t, string_t>> database::get_matchings() {
         entry.value_or(kDefaultSerializedDBValuePair);
     // TODO (C) vrfy unaligned..
     matchings.emplace_back(
-        cista::copy_from_potentially_unaligned<nlocation_key_t>(loc_key),
+        location(
+            cista::copy_from_potentially_unaligned<location_key_t>(loc_key)),
         string_t{osm_key});
     entry = cur.get(lmdb::cursor_op::NEXT);
   }
@@ -221,15 +222,14 @@ std::vector<std::pair<nlocation_key_t, string_t>> database::get_matchings() {
   return matchings;
 }
 
-hash_map<nlocation_key_t, platform> database::get_loc_to_pf_matchings() {
-  auto loc_pf_matchings = hash_map<nlocation_key_t, platform>{};
+hash_map<location_key_t, platform> database::get_loc_to_pf_matchings() {
+  auto loc_pf_matchings = hash_map<location_key_t, platform>{};
 
   for (auto& [location, osm_key] : get_matchings()) {
     auto const pf = get_platform(osm_key);
 
     if (pf.has_value()) {
-      loc_pf_matchings.insert(
-          std::pair<nlocation_key_t, platform>(location, pf.value()));
+      loc_pf_matchings.emplace(location.key(), pf.value());
     }
   }
 

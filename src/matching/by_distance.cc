@@ -22,7 +22,8 @@ matching_results distance_matcher::matching() {
     progress_tracker->increment();
     auto nloc = data_.locations_to_match_.get(n::location_idx_t{i});
 
-    if (data_.already_matched_nloc_keys_.count(to_key(nloc.pos_)) == 1) {
+    if (data_.already_matched_nloc_keys_.count(location(nloc.pos_).key()) ==
+        1) {
       continue;
     }
 
@@ -37,12 +38,12 @@ matching_results distance_matcher::matching() {
   }
 
   return matches;
-};
+}
 
 std::pair<bool, matching_result> distance_matcher::match_by_distance(
     n::location const& nloc) {
   auto match = matching_result{};
-  match.nloc_pos_ = nloc.pos_;
+  match.loc_ = location(nloc.pos_);
 
   auto has_match = false;
   auto shortest_dist = std::numeric_limits<double>::max();

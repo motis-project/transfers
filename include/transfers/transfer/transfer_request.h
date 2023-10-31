@@ -20,8 +20,8 @@ struct transfer_request_by_keys {
   // can be used as a database id/key.
   string_t key() const;
 
-  nlocation_key_t from_nloc_key_;
-  vector<nlocation_key_t> to_nloc_keys_;
+  location_key_t from_loc_;
+  vector<location_key_t> to_locs_;
   profile_key_t profile_;
 };
 
@@ -33,10 +33,10 @@ struct transfer_request {
   string_t key() const;
 
   platform transfer_start_;
-  nlocation_key_t from_nloc_key_;
+  location from_loc_;
 
   std::vector<platform> transfer_targets_;
-  vector<nlocation_key_t> to_nloc_keys_;
+  vector<location> to_locs_;
 
   profile_key_t profile_;
 };
@@ -44,7 +44,7 @@ struct transfer_request {
 struct transfer_request_generation_data {
   struct matched_nigiri_location_data {
     platform_index const& matched_pfs_idx_;
-    vector<nlocation_key_t> const& nloc_keys_;
+    vector<location>& locs_;
     bool set_matched_pfs_idx_;
   } old_, update_;
 
@@ -65,7 +65,7 @@ struct transfer_request_options {
 // been successfully matched to an OSM platform.
 std::vector<transfer_request> to_transfer_requests(
     std::vector<transfer_request_by_keys> const&,
-    hash_map<nlocation_key_t, platform> const&);
+    hash_map<location_key_t, platform> const&);
 
 // Generates new `transfer_request_keys` based on matched platforms in the old
 // and update state. List of `transfer_request_keys` are always created for the
