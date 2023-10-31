@@ -84,14 +84,14 @@ struct storage {
   // `update_state_` state struct.
   // Update merges the old transfer request keys with the new one.
   void add_new_transfer_requests_by_keys(
-      std::vector<transfer_request_by_keys> const);
+      std::vector<transfer_request_by_keys> const&);
 
   // Adds new transfer results to the database. Previously unknown transfer
   // results are added to the `update_state_` state struct. Previously known
   // transfer results are updated. The difference (described in the transfer
   // result struct is added to the `update_state_` struct.
   // Update merges the old transfer result with the new one.
-  void add_new_transfer_results(std::vector<transfer_result> const);
+  void add_new_transfer_results(std::vector<transfer_result> const&);
 
   ::nigiri::timetable& tt_;
 

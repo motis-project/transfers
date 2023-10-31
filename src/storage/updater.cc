@@ -102,9 +102,9 @@ void storage_updater::generate_and_store_transfer_requests(
       .out_bounds(15.F, 30.F)
       .in_high(4 * treq_gen_data.profile_key_to_search_profile_.size());
   storage_.add_new_transfer_requests_by_keys(
-      std::move(generate_all_pair_transfer_requests_by_keys(
+      generate_all_pair_transfer_requests_by_keys(
           storage_.get_transfer_request_generation_data(),
-          {.old_to_old_ = old_to_old})));
+          {.old_to_old_ = old_to_old}));
 }
 
 void storage_updater::generate_and_store_transfer_results(
@@ -124,8 +124,8 @@ void storage_updater::generate_and_store_transfer_results(
       .out_bounds(30.F, 90.F)
       .in_high(treqs.size());
 
-  storage_.add_new_transfer_results(std::move(route_multiple_requests(
-      treqs, rg, storage_.profile_key_to_search_profile_)));
+  storage_.add_new_transfer_results(route_multiple_requests(
+      treqs, rg, storage_.profile_key_to_search_profile_));
 }
 
 }  // namespace transfers

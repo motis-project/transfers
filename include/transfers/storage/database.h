@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <filesystem>
 #include <optional>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -18,6 +19,10 @@
 #include "transfers/types.h"
 
 namespace transfers {
+
+constexpr auto kDefaultSerializedDBValuePair =
+    std::pair<std::string_view, std::string_view>({}, {});
+constexpr auto kDefaultSerializedDBValueSingle = std::string_view{};
 
 struct database {
   explicit database(std::filesystem::path const& db_file_path,

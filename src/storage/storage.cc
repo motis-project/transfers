@@ -106,7 +106,7 @@ void storage::add_new_matching_results(matching_results const mrs) {
 }
 
 void storage::add_new_transfer_requests_by_keys(
-    std::vector<transfer_request_by_keys> const treqs_k) {
+    std::vector<transfer_request_by_keys> const& treqs_k) {
   auto const updated_in_db = db_.update_transfer_requests_by_keys(treqs_k);
   auto const added_to_db = db_.put_transfer_requests_by_keys(treqs_k);
   update_state_.transfer_requests_by_keys_.clear();
@@ -121,7 +121,7 @@ void storage::add_new_transfer_requests_by_keys(
 }
 
 void storage::add_new_transfer_results(
-    std::vector<transfer_result> const tres) {
+    std::vector<transfer_result> const& tres) {
   auto const updated_in_db = db_.update_transfer_results(tres);
   auto const added_to_db = db_.put_transfer_results(tres);
   update_state_.transfer_results_.clear();
