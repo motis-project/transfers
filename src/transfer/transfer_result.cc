@@ -43,7 +43,7 @@ std::vector<std::vector<transfer_info>> to_transfer_infos(
   });
 }
 
-string_t transfer_result::key() const {
+std::string transfer_result::key() const {
   auto key = std::string{};
 
   // transfer_result key: from location key + profile key
@@ -51,7 +51,7 @@ string_t transfer_result::key() const {
   std::memcpy(key.data(), &from_loc_, sizeof(from_loc_));
   std::memcpy(key.data() + sizeof(from_loc_), &profile_, sizeof(profile_));
 
-  return string_t{key};
+  return key;
 }
 
 pr::routing_query build_routing_query(

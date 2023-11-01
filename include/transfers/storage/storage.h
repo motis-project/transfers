@@ -71,11 +71,11 @@ struct storage {
 
   // Adds new platforms to the database. Previously unknown platforms are added
   // to the `update_state_` state struct. Deletes old `update_state_` platforms.
-  void add_new_platforms(std::vector<platform>);
+  void add_new_platforms(std::vector<platform>&);
 
   // Adds new matching results to the database. Previously unknown matches are
   // added to the `update_state_` state struct.
-  void add_new_matching_results(std::vector<matching_result> const);
+  void add_new_matching_results(std::vector<matching_result> const&);
 
   // Adds new transfer requests keys to the database. Previously unknown
   // transfer requests keys are added to the `update_state_` state struct.
@@ -129,9 +129,9 @@ private:
     vector<location> locs_;
 
     // mapping matched nloc to pf
-    hash_map<location_key_t, platform> matches_{};
-    std::vector<transfer_request_by_keys> transfer_requests_by_keys_{};
-    std::vector<transfer_result> transfer_results_{};
+    hash_map<location_key_t, platform> matches_;
+    std::vector<transfer_request_by_keys> transfer_requests_by_keys_;
+    std::vector<transfer_result> transfer_results_;
   } old_state_, update_state_;
 
   database db_;

@@ -1,7 +1,6 @@
 #include "transfers/platform/platform.h"
 
 #include <cstring>
-#include <string>
 
 namespace transfers {
 
@@ -15,7 +14,7 @@ char get_osm_type_as_char(osm_type const type) {
   }
 }
 
-string_t platform::key() const {
+std::string platform::key() const {
   auto key = std::string{};
 
   // platform key: osm_type + osm_id
@@ -23,7 +22,7 @@ string_t platform::key() const {
   std::memcpy(key.data(), &osm_type_, sizeof(osm_type_));
   std::memcpy(key.data() + sizeof(osm_type_), &osm_id_, sizeof(osm_id_));
 
-  return string_t{key};
+  return key;
 }
 
 bool platform::operator==(platform const& other) const {

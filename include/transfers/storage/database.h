@@ -71,8 +71,8 @@ private:
 
   void init();
 
-  std::vector<std::pair<location, string_t>> get_matchings();
-  std::optional<platform> get_platform(string_t const& /* osm_key */);
+  std::vector<std::pair<location, std::string>> get_matchings();
+  std::optional<platform> get_platform(std::string const& /* osm_key */);
 
   lmdb::env mutable env_;
   profile_key_t highest_profile_id_{};

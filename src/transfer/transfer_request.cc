@@ -12,7 +12,7 @@
 
 namespace transfers {
 
-string_t transfer_request_by_keys::key() const {
+std::string transfer_request_by_keys::key() const {
   auto key = std::string{};
 
   // transfer_request_by_keys key: from location key + profile key
@@ -20,10 +20,10 @@ string_t transfer_request_by_keys::key() const {
   std::memcpy(key.data(), &from_loc_, sizeof(from_loc_));
   std::memcpy(key.data() + sizeof(from_loc_), &profile_, sizeof(profile_));
 
-  return string_t{key};
+  return key;
 }
 
-string_t transfer_request::key() const {
+std::string transfer_request::key() const {
   auto key = std::string{};
 
   // transfer_request key: from location key + profile key
@@ -31,7 +31,7 @@ string_t transfer_request::key() const {
   std::memcpy(key.data(), &from_loc_, sizeof(from_loc_));
   std::memcpy(key.data() + sizeof(from_loc_), &profile_, sizeof(profile_));
 
-  return string_t{key};
+  return key;
 }
 
 std::vector<transfer_request> to_transfer_requests(

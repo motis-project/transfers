@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 #include <vector>
 
 #include "transfers/types.h"
@@ -20,7 +21,7 @@ struct platform {
 
   // Returns a short and unique `platform` representation that can be used as a
   // database id/key.
-  string_t key() const;
+  std::string key() const;
 
   geo::latlng loc_;
   std::int64_t osm_id_{-1};

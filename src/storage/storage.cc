@@ -79,7 +79,7 @@ void storage::add_new_profiles(std::vector<string_t> const& profile_names) {
   profile_key_to_profile_name_ = db_.get_profile_key_to_name();
 }
 
-void storage::add_new_platforms(std::vector<platform> pfs) {
+void storage::add_new_platforms(std::vector<platform>& pfs) {
   auto const added_to_db = db_.put_platforms(pfs);
   auto new_pfs = utl::to_vec(
       added_to_db, [&pfs](auto const i) -> platform { return pfs[i]; });
@@ -88,7 +88,8 @@ void storage::add_new_platforms(std::vector<platform> pfs) {
   update_state_.set_pfs_idx_ = true;
 }
 
-void storage::add_new_matching_results(std::vector<matching_result> const mrs) {
+void storage::add_new_matching_results(
+    std::vector<matching_result> const& mrs) {
   auto const added_to_db = db_.put_matching_results(mrs);
   auto const new_mrs = utl::to_vec(
       added_to_db, [&mrs](auto const i) -> matching_result { return mrs[i]; });

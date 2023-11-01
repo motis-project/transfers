@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ostream>
+#include <string>
 #include <vector>
 
 #include "transfers/platform/platform.h"
@@ -18,7 +19,7 @@ struct transfer_request_by_keys {
 
   // Returns a short and unique `transfer_request_by_keys` representation that
   // can be used as a database id/key.
-  string_t key() const;
+  std::string key() const;
 
   location_key_t from_loc_;
   vector<location_key_t> to_locs_;
@@ -30,7 +31,7 @@ struct transfer_request {
 
   // Returns a short and unique `transfer_request` representation that can be
   // used as a database id/key.
-  string_t key() const;
+  std::string key() const;
 
   platform transfer_start_;
   location from_loc_;

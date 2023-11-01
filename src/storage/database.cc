@@ -158,7 +158,7 @@ std::vector<platform> database::get_platforms() {
   return pfs;
 }
 
-std::optional<platform> database::get_platform(string_t const& osm_key) {
+std::optional<platform> database::get_platform(std::string const& osm_key) {
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto platforms_db = platforms_dbi(txn);
 
@@ -198,8 +198,8 @@ std::vector<size_t> database::put_matching_results(
   return added_indices;
 }
 
-std::vector<std::pair<location, string_t>> database::get_matchings() {
-  auto matchings = std::vector<std::pair<location, string_t>>{};
+std::vector<std::pair<location, std::string>> database::get_matchings() {
+  auto matchings = std::vector<std::pair<location, std::string>>{};
 
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto matchings_db = matchings_dbi(txn);
@@ -215,7 +215,7 @@ std::vector<std::pair<location, string_t>> database::get_matchings() {
     matchings.emplace_back(
         location(
             cista::copy_from_potentially_unaligned<location_key_t>(loc_key)),
-        string_t{osm_key});
+        std::string{osm_key});
     entry = cur.get(lmdb::cursor_op::NEXT);
   }
   cur.reset();
