@@ -88,7 +88,7 @@ void storage::add_new_platforms(std::vector<platform> pfs) {
   update_state_.set_pfs_idx_ = true;
 }
 
-void storage::add_new_matching_results(matching_results const mrs) {
+void storage::add_new_matching_results(std::vector<matching_result> const mrs) {
   auto const added_to_db = db_.put_matching_results(mrs);
   auto const new_mrs = utl::to_vec(
       added_to_db, [&mrs](auto const i) -> matching_result { return mrs[i]; });

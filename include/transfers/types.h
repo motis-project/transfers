@@ -48,11 +48,14 @@ using latlng_split = union {
 };
 
 struct location {
-  bool operator==(location const& other) const { return key() == other.key(); };
+  bool operator==(location const& other) const {
+    return lat_ == other.lat_ && lng_ == other.lng_;
+  }
 
   location() = default;
   explicit location(geo::latlng const& coord)
-      : lat_(coord.lat_), lng_(coord.lng_) {}
+      : lat_(static_cast<float>(coord.lat_)),
+        lng_(static_cast<float>(coord.lng_)) {}
   location(float lat, float lng) : lat_(lat), lng_(lng) {}
   explicit location(location_key_t key) {
     auto latlng_splitted = latlng_split{};
@@ -71,9 +74,9 @@ struct location {
     auto const lng32b = std::bit_cast<std::uint32_t>(lng_);
 
     return (static_cast<location_key_t>(lat32b) << 32) | lng32b;
-  };
+  }
 
-  geo::latlng to_latlng() const { return {lat_, lng_}; };
+  geo::latlng to_latlng() const { return {lat_, lng_}; }
 
   float lat_{0.0}, lng_{0.0};
 };

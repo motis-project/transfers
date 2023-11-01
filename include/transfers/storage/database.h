@@ -38,7 +38,8 @@ struct database {
   std::vector<platform> get_platforms();
 
   // matchings
-  std::vector<std::size_t> put_matching_results(matching_results const&);
+  std::vector<std::size_t> put_matching_results(
+      std::vector<matching_result> const&);
   hash_map<location_key_t, platform> get_loc_to_pf_matchings();
 
   // transfer requests

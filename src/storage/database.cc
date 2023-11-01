@@ -172,7 +172,7 @@ std::optional<platform> database::get_platform(string_t const& osm_key) {
 }
 
 std::vector<size_t> database::put_matching_results(
-    matching_results const& mrs) {
+    std::vector<matching_result> const& mrs) {
   auto added_indices = std::vector<std::size_t>{};
 
   auto txn = lmdb::txn{env_};

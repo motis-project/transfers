@@ -75,7 +75,7 @@ struct storage {
 
   // Adds new matching results to the database. Previously unknown matches are
   // added to the `update_state_` state struct.
-  void add_new_matching_results(matching_results const);
+  void add_new_matching_results(std::vector<matching_result> const);
 
   // Adds new transfer requests keys to the database. Previously unknown
   // transfer requests keys are added to the `update_state_` state struct.

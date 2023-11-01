@@ -12,8 +12,8 @@ namespace n = ::nigiri;
 
 namespace transfers {
 
-matching_results distance_matcher::matching() {
-  auto matches = matching_results{};
+std::vector<matching_result> distance_matcher::matching() {
+  auto matches = std::vector<matching_result>{};
 
   auto progress_tracker = utl::get_active_progress_tracker();
 

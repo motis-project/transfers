@@ -12,7 +12,7 @@
 namespace transfers {
 
 struct transfer_request_by_keys {
-  CISTA_COMPARABLE();
+  CISTA_COMPARABLE()
   friend std::ostream& operator<<(std::ostream&,
                                   transfer_request_by_keys const&);
 

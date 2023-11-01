@@ -27,7 +27,7 @@ struct distance_matcher : public matcher {
   // is chosen as match to the nigiri::location. Matching distances are chosen
   // from the options.
   // Returns a list of all found matches.
-  matching_results matching() override;
+  std::vector<matching_result> matching() override;
 
 private:
   // Matches a single `nigiri::location` and returns the result as a

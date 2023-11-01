@@ -30,7 +30,6 @@ struct matching_result {
   platform pf_;
   location loc_;
 };
-using matching_results = std::vector<matching_result>;
 
 struct matcher {
 
@@ -47,7 +46,7 @@ struct matcher {
 
   // Matches `nigiri::location`s with `platform`s extracted from OSM data and
   // returns a list of valid matches.
-  virtual matching_results matching() = 0;
+  virtual std::vector<matching_result> matching() = 0;
 
   matching_data const data_;
   matching_options const options_;
