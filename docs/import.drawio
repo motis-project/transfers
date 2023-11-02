@@ -1,0 +1,96 @@
+<mxfile host="app.diagrams.net" modified="2023-11-02T12:49:26.293Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/119.0" etag="77x8tNNMcQlS0us3epft" version="22.0.8" type="device">
+  <diagram name="Seite-1" id="AyoZEofNfDzOmkHZfnh4">
+    <mxGraphModel dx="1434" dy="774" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="20" y="40" width="600" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-1" value="&lt;div&gt;Import (Nigiri) Timetable&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="40" y="80" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-2" value="Import (PPR) Graph" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="240" y="80" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-5" value="requirements" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="20" y="40" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-6" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="20" y="200" width="600" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Calibri Light;" parent="1" source="6k2Ir_LJQIkgWPy9aab9-8" target="6k2Ir_LJQIkgWPy9aab9-19" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-8" value="update state" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="440" y="370" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-9" value="old state (empty)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="440" y="220" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Calibri Light;" parent="1" source="6k2Ir_LJQIkgWPy9aab9-10" target="6k2Ir_LJQIkgWPy9aab9-8" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-10" value="extract osm platforms" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="140" y="220" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Calibri Light;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="6k2Ir_LJQIkgWPy9aab9-11" target="6k2Ir_LJQIkgWPy9aab9-8" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="439.9999999999998" y="359.79310344827593" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-11" value="match timetable locations and osm platforms" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="140" y="320" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Calibri Light;" parent="1" source="6k2Ir_LJQIkgWPy9aab9-12" target="6k2Ir_LJQIkgWPy9aab9-8" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-12" value="generate transfer requests" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="140" y="420" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Calibri Light;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="6k2Ir_LJQIkgWPy9aab9-13" target="6k2Ir_LJQIkgWPy9aab9-8" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="439.9999999999998" y="360" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="370" y="560" />
+              <mxPoint x="370" y="410" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-13" value="generate transfer results" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="140" y="520" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;fontFamily=Calibri Light;" parent="1" source="6k2Ir_LJQIkgWPy9aab9-14" target="6k2Ir_LJQIkgWPy9aab9-19" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-14" value="update timetable transfers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="140" y="620" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-19" value="timetable" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b0e3e6;strokeColor=#0e8088;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="440" y="620" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-24" value="full import" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="20" y="200" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-26" value="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="140" y="270" width="20" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-27" value="2" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="140" y="370" width="20" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-28" value="3" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="140" y="470" width="20" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-29" value="4" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="140" y="570" width="20" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6k2Ir_LJQIkgWPy9aab9-30" value="5" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Calibri Light;" parent="1" vertex="1">
+          <mxGeometry x="140" y="670" width="20" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="KRnDY5ifE90brMDBRSdQ-1" value="Import (PPR) Profiles" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="440" y="80" width="160" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
