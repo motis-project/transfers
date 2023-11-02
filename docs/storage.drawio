@@ -1,0 +1,88 @@
+<mxfile host="app.diagrams.net" modified="2023-11-02T11:48:02.327Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/119.0" etag="iEzBi4YGDWLw-rGTO4nc" version="22.0.8" type="device">
+  <diagram name="Seite-1" id="NPFzBnoaeVA9B6rSo5pP">
+    <mxGraphModel dx="989" dy="534" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="mJ_gq4kda5PM_Au547qA-10" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="20" y="220" width="360" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Calibri Light;" edge="1" parent="1" source="mJ_gq4kda5PM_Au547qA-2" target="mJ_gq4kda5PM_Au547qA-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-2" value="&lt;b&gt;LMD&lt;/b&gt;ata&lt;b&gt;B&lt;/b&gt;ase" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.database;whiteSpace=wrap;fontFamily=Calibri Light;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="320" width="120" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=Calibri Light;" edge="1" parent="1" source="mJ_gq4kda5PM_Au547qA-3" target="mJ_gq4kda5PM_Au547qA-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-3" value="old state" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="200" y="520" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Calibri Light;" edge="1" parent="1" source="mJ_gq4kda5PM_Au547qA-5" target="mJ_gq4kda5PM_Au547qA-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-5" value="update state" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="200" y="240" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-6" value="MERGE/COMPARE" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="220" y="380" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;fontFamily=Calibri Light;" edge="1" parent="1" source="mJ_gq4kda5PM_Au547qA-6" target="mJ_gq4kda5PM_Au547qA-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-11" value="storage" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="20" y="220" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-16" value="" style="endArrow=none;dashed=1;html=1;rounded=0;strokeWidth=2;fontFamily=Calibri Light;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="440" y="559.5" as="sourcePoint" />
+            <mxPoint x="360" y="559.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-17" value="" style="endArrow=none;dashed=1;html=1;rounded=0;strokeWidth=2;fontFamily=Calibri Light;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="440" y="279.5" as="sourcePoint" />
+            <mxPoint x="360" y="279.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-13" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="410" y="220" width="210" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-14" value="state" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="410" y="220" width="46" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-21" value="&lt;div&gt;osm_platforms&lt;/div&gt;&lt;div&gt;(R-Tree)&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="450" y="245" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-22" value="&lt;div&gt;matched timetable locations&lt;/div&gt;&lt;div&gt;(R-Tree, List, HashMap)&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="450" y="340" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-24" value="&lt;div&gt;transfer requests&lt;/div&gt;&lt;div&gt;(matched to matched)&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="450" y="440" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-25" value="&lt;div&gt;transfer results&lt;/div&gt;&lt;div&gt;(ppr routing)&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="450" y="540" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-28" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="650" y="220" width="206" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-29" value="additional" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="650" y="220" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-30" value="OpenStreetMap File" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="688" y="245" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-31" value="PPR Profiles" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="688" y="340" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-32" value="PPR Routing Graph" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="688" y="440" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="mJ_gq4kda5PM_Au547qA-33" value="(Nigiri) Timetable" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Calibri Light;" vertex="1" parent="1">
+          <mxGeometry x="688" y="540" width="130" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

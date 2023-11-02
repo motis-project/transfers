@@ -125,7 +125,7 @@ private:
     bool set_matched_pfs_idx_{false};
     bool set_pfs_idx_{false};
 
-    // matched nigiri location keys
+    // matched nigiri location
     vector<location> locs_;
 
     // mapping matched nloc to pf
