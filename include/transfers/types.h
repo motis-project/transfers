@@ -1,8 +1,10 @@
 #pragma once
 
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
 #include <bit>
+#include <limits>
 
 #include "ankerl/cista_adapter.h"
 
@@ -49,7 +51,11 @@ using latlng_split = union {
 
 struct location {
   bool operator==(location const& other) const {
-    return lat_ == other.lat_ && lng_ == other.lng_;
+    auto cmp_lat =
+        std::abs(lat_ - other.lat_) <= std::numeric_limits<float>::epsilon();
+    auto cmp_lng =
+        std::abs(lng_ - other.lng_) <= std::numeric_limits<float>::epsilon();
+    return cmp_lat && cmp_lng;
   }
 
   location() = default;

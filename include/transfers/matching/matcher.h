@@ -36,7 +36,7 @@ struct matcher {
   explicit matcher(matching_data const& data, matching_options const& options)
       : data_(data), options_(options) {}
 
-  virtual ~matcher() = default;
+  virtual ~matcher();
 
   matcher(const matcher&) = delete;
   matcher& operator=(const matcher&) = delete;

@@ -37,7 +37,7 @@ struct transfer_request {
   location from_loc_;
 
   std::vector<platform> transfer_targets_;
-  vector<location> to_locs_;
+  std::vector<location> to_locs_;
 
   profile_key_t profile_;
 };
@@ -45,7 +45,7 @@ struct transfer_request {
 struct transfer_request_generation_data {
   struct matched_nigiri_location_data {
     platform_index const& matched_pfs_idx_;
-    vector<location>& locs_;
+    std::vector<location>& locs_;
     bool set_matched_pfs_idx_;
   } old_, update_;
 

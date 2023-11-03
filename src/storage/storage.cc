@@ -146,7 +146,7 @@ void storage::load_old_state_from_db(set<profile_key_t> const& profile_keys) {
   old_state_.transfer_results_ = db_.get_transfer_results(profile_keys);
 
   auto matched_pfs = std::vector<platform>{};
-  auto matched_locs = vector<location>{};
+  auto matched_locs = std::vector<location>{};
   for (auto const& [loc_key, pf] : old_state_.matches_) {
     matched_locs.emplace_back(loc_key);
     matched_pfs.emplace_back(pf);

@@ -72,7 +72,7 @@ pr::routing_query build_routing_query(
   // query: get search direction (default: FWD)
   auto const& dir = pr::search_direction::FWD;
 
-  return pr::routing_query(li_start, ils_dests, profile, dir);
+  return pr::routing_query{li_start, ils_dests, profile, dir};
 }
 
 transfer_result route_single_request(

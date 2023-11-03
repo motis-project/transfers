@@ -16,7 +16,7 @@
 namespace transfers {
 
 struct transfer_info {
-  CISTA_COMPARABLE();
+  CISTA_COMPARABLE()
   friend std::ostream& operator<<(std::ostream&, transfer_info const&);
 
   ::nigiri::duration_t duration_{};
@@ -24,7 +24,7 @@ struct transfer_info {
 };
 
 struct transfer_result {
-  CISTA_COMPARABLE();
+  CISTA_COMPARABLE()
   friend std::ostream& operator<<(std::ostream&, transfer_result const&);
 
   // Returns a short and unique `transfer_result` representation that can be

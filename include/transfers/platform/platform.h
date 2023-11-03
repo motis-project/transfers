@@ -10,7 +10,7 @@
 
 namespace transfers {
 
-enum class osm_type { kNode, kWay, kRelation, kUnknown };
+enum class osm_type { kNode, kWay, kRelation };
 
 // Returns the char representation of the given `osm_type`.
 // n: kNode, w: kWay, r: kRelation, u: kUnknown

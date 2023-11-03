@@ -126,7 +126,7 @@ private:
     bool set_pfs_idx_{false};
 
     // matched nigiri location
-    vector<location> locs_;
+    std::vector<location> locs_;
 
     // mapping matched nloc to pf
     hash_map<location_key_t, platform> matches_;
