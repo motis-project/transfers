@@ -77,16 +77,15 @@ hash_map<string_t, profile_key_t> database::get_profile_keys() {
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto profiles_db = profiles_dbi(txn);
   auto cur = lmdb::cursor{txn, profiles_db};
-  auto entry = cur.get(lmdb::cursor_op::FIRST);
 
-  while (entry.has_value()) {
+  for (auto entry = cur.get(lmdb::cursor_op::FIRST); entry.has_value();
+       entry = cur.get(lmdb::cursor_op::NEXT)) {
     // Here it is known that the entry has a value. Therefore,
     // kDefaultStringViewPair is never used.
-    auto const [name, key] = entry.value_or(kDefaultSerializedDBValuePair);
+    auto const [name, key] = entry.value();
     keys_with_name.emplace(
         string_t{name},
         cista::copy_from_potentially_unaligned<profile_key_t>(key));
-    entry = cur.get(lmdb::cursor_op::NEXT);
   }
 
   cur.reset();
@@ -99,16 +98,15 @@ hash_map<profile_key_t, string_t> database::get_profile_key_to_name() {
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto profiles_db = profiles_dbi(txn);
   auto cur = lmdb::cursor{txn, profiles_db};
-  auto entry = cur.get(lmdb::cursor_op::FIRST);
 
-  while (entry.has_value()) {
+  for (auto entry = cur.get(lmdb::cursor_op::FIRST); entry.has_value();
+       entry = cur.get(lmdb::cursor_op::NEXT)) {
     // Here it is known that the entry has a value. Therefore,
     // kDefaultStringViewPair is never used.
-    auto const [name, key] = entry.value_or(kDefaultSerializedDBValuePair);
+    auto const [name, key] = entry.value();
     keys_with_name.emplace(
         cista::copy_from_potentially_unaligned<profile_key_t>(key),
         string_t{name});
-    entry = cur.get(lmdb::cursor_op::NEXT);
   }
 
   cur.reset();
@@ -142,13 +140,12 @@ std::vector<platform> database::get_platforms() {
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto platforms_db = platforms_dbi(txn);
   auto cur = lmdb::cursor{txn, platforms_db};
-  auto entry = cur.get(lmdb::cursor_op::FIRST);
 
-  while (entry.has_value()) {
+  for (auto entry = cur.get(lmdb::cursor_op::FIRST); entry.has_value();
+       entry = cur.get(lmdb::cursor_op::NEXT)) {
     // Here it is known that the entry has a value. Therefore,
     // kDefaultStringViewPair is never used.
-    auto const [osm_key, pf_serialized] =
-        entry.value_or(kDefaultSerializedDBValuePair);
+    auto const [osm_key, pf_serialized] = entry.value();
     pfs.emplace_back(
         cista::copy_from_potentially_unaligned<platform>(pf_serialized));
     entry = cur.get(lmdb::cursor_op::NEXT);
@@ -204,20 +201,19 @@ std::vector<std::pair<location, std::string>> database::get_matchings() {
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto matchings_db = matchings_dbi(txn);
   auto cur = lmdb::cursor{txn, matchings_db};
-  auto entry = cur.get(lmdb::cursor_op::FIRST);
 
-  while (entry.has_value()) {
+  for (auto entry = cur.get(lmdb::cursor_op::FIRST); entry.has_value();
+       entry = cur.get(lmdb::cursor_op::NEXT)) {
     // Here it is known that the entry has a value. Therefore,
     // kDefaultStringViewPair is never used.
-    auto const [loc_key, osm_key] =
-        entry.value_or(kDefaultSerializedDBValuePair);
+    auto const [loc_key, osm_key] = entry.value();
     // TODO (C) vrfy unaligned..
     matchings.emplace_back(
         location(
             cista::copy_from_potentially_unaligned<location_key_t>(loc_key)),
         std::string{osm_key});
-    entry = cur.get(lmdb::cursor_op::NEXT);
   }
+
   cur.reset();
   return matchings;
 }
@@ -280,8 +276,7 @@ std::vector<std::size_t> database::update_transfer_requests_by_keys(
     // Here it is known that the entry has a value. Therefore,
     // kDefaultStringViewPair is never used.
     auto const trans_req_by_key_serialized =
-        txn.get(transreqs_db, treq_key)
-            .value_or(kDefaultSerializedDBValueSingle);
+        txn.get(transreqs_db, treq_key).value();
 
     auto treq_from_db =
         cista::copy_from_potentially_unaligned<transfer_request_by_keys>(
@@ -312,13 +307,12 @@ std::vector<transfer_request_by_keys> database::get_transfer_requests_by_keys(
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto transreqs_db = transreqs_dbi(txn);
   auto cur = lmdb::cursor{txn, transreqs_db};
-  auto entry = cur.get(lmdb::cursor_op::FIRST);
 
-  while (entry.has_value()) {
+  for (auto entry = cur.get(lmdb::cursor_op::FIRST); entry.has_value();
+       entry = cur.get(lmdb::cursor_op::NEXT)) {
     // Here it is known that the entry has a value. Therefore,
     // kDefaultStringViewPair is never used.
-    auto const [key, trans_req_by_keys] =
-        entry.value_or(kDefaultSerializedDBValuePair);
+    auto const [key, trans_req_by_keys] = entry.value();
 
     auto const db_treq_k =
         cista::copy_from_potentially_unaligned<transfer_request_by_keys>(
@@ -328,8 +322,6 @@ std::vector<transfer_request_by_keys> database::get_transfer_requests_by_keys(
     if (ppr_profiles.count(db_treq_k.profile_) == 1) {
       treqs_k.emplace_back(db_treq_k);
     }
-
-    entry = cur.get(lmdb::cursor_op::NEXT);
   }
 
   cur.reset();
@@ -379,9 +371,7 @@ std::vector<std::size_t> database::update_transfer_results(
 
     // Here it is known that the entry has a value. Therefore,
     // kDefaultStringViewPair is never used.
-    auto const trans_res_serialized =
-        txn.get(transfers_db, tres_key)
-            .value_or(kDefaultSerializedDBValueSingle);
+    auto const trans_res_serialized = txn.get(transfers_db, tres_key).value();
     auto tres_from_db = cista::copy_from_potentially_unaligned<transfer_result>(
         trans_res_serialized);
     auto merged = merge(tres_from_db, tres);
@@ -410,12 +400,12 @@ std::vector<transfer_result> database::get_transfer_results(
   auto txn = lmdb::txn{env_, lmdb::txn_flags::RDONLY};
   auto transfers_db = transfers_dbi(txn);
   auto cur = lmdb::cursor(txn, transfers_db);
-  auto entry = cur.get(lmdb::cursor_op::FIRST);
 
-  while (entry.has_value()) {
+  for (auto entry = cur.get(lmdb::cursor_op::FIRST); entry.has_value();
+       entry = cur.get(lmdb::cursor_op::NEXT)) {
     // Here it is known that the entry has a value. Therefore,
     // kDefaultStringViewPair is never used.
-    auto const [key, trans_res] = entry.value_or(kDefaultSerializedDBValuePair);
+    auto const [key, trans_res] = entry.value();
 
     auto const db_tr =
         cista::copy_from_potentially_unaligned<transfer_result>(trans_res);
@@ -424,8 +414,6 @@ std::vector<transfer_result> database::get_transfer_results(
     if (ppr_profile_names.count(db_tr.profile_) == 1) {
       trs.emplace_back(db_tr);
     }
-
-    entry = cur.get(lmdb::cursor_op::NEXT);
   }
 
   cur.reset();

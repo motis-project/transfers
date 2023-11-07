@@ -20,10 +20,6 @@
 
 namespace transfers {
 
-constexpr auto kDefaultSerializedDBValuePair =
-    std::pair<std::string_view, std::string_view>({}, {});
-constexpr auto kDefaultSerializedDBValueSingle = std::string_view{};
-
 struct database {
   explicit database(std::filesystem::path const& db_file_path,
                     std::size_t const db_max_size);

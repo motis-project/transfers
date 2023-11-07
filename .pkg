@@ -19,9 +19,9 @@
   branch=master
   commit=5be96596cb38c8a7919c5f543097429061c16fb6
 [nigiri]
-  url=git@github.com:carstenhagelgans/nigiri.git
-  branch=profiles
-  commit=b237f4f115a1df2f072ec54100e6418328fb8ec8
+  url=git@github.com:motis-project/nigiri.git
+  branch=master
+  commit=4e433fde787e4f1a0a3a551d9535e33122995673
 [osmium]
   url=git@github.com:motis-project/libosmium.git
   branch=master

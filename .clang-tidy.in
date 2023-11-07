@@ -77,6 +77,7 @@ Checks: "*,\
 -readability-identifier-naming,\
 -cert-dcl37-c,\
 -bugprone-reserved-identifier,\
+-bugprone-unchecked-optional-access,\
 -cert-dcl51-cpp,\
 -misc-confusable-identifiers"
 WarningsAsErrors: '*'
