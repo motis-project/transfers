@@ -18,6 +18,8 @@
 
 namespace transfers {
 
+constexpr auto kCoordinatePrecision = 10000000.0;
+
 template <typename K, typename V, typename Hash = cista::hash_all,
           typename Equality = cista::equals_all>
 using hash_map = cista::raw::ankerl_map<K, V, Hash, Equality>;
@@ -36,55 +38,55 @@ template <typename V>
 using vector = cista::offset::vector<V>;
 
 // using nlocation_key_t = std::uint64_t;
-using location_key_t = std::uint64_t;
+using location_key_t = std::int64_t;
 using profile_key_t = std::uint8_t;
 
 using string_t = cista::offset::string;
 
-using latlng_split = union {
-  struct {
-    std::uint32_t lng_;
-    std::uint32_t lat_;
-  } split_;
-  location_key_t latlng_full_;
-};
-
 struct location {
   bool operator==(location const& other) const {
-    auto cmp_lat =
-        std::abs(lat_ - other.lat_) <= std::numeric_limits<float>::epsilon();
-    auto cmp_lng =
-        std::abs(lng_ - other.lng_) <= std::numeric_limits<float>::epsilon();
-    return cmp_lat && cmp_lng;
+    return latlng_.latlng_full_ == other.latlng_.latlng_full_;
   }
 
   location() = default;
-  explicit location(geo::latlng const& coord)
-      : lat_(static_cast<float>(coord.lat_)),
-        lng_(static_cast<float>(coord.lng_)) {}
-  location(float lat, float lng) : lat_(lat), lng_(lng) {}
-  explicit location(location_key_t key) {
-    auto latlng_splitted = latlng_split{};
-    latlng_splitted.latlng_full_ = key;
+  explicit location(geo::latlng const& coord) {
+    latlng_.split_.lat_ = double_to_fix(coord.lat_);
+    latlng_.split_.lng_ = double_to_fix(coord.lng_);
+  }
 
-    lng_ = std::bit_cast<float>(latlng_splitted.split_.lng_);
-    lat_ = std::bit_cast<float>(latlng_splitted.split_.lat_);
+  location(double lat, double lng) {
+    latlng_.split_.lat_ = double_to_fix(lat);
+    latlng_.split_.lng_ = double_to_fix(lng);
+  }
+
+  explicit location(location_key_t key) { latlng_.latlng_full_ = key; }
+
+  static std::int32_t double_to_fix(double const d) {
+    return static_cast<std::int32_t>(std::round(d * kCoordinatePrecision));
+  }
+
+  static float fix_to_double(std::int32_t const i) {
+    return static_cast<double>(i) / kCoordinatePrecision;
   }
 
   // Returns a unique  nigiri location coordinate representation
-  // Interprets longitude and latitude as 32b float values. Appends them to each
-  // other and thus creates a 64b long coordinate representation.
+  // Interprets longitude and latitude as 32b float values. Appends them to
+  // each other and thus creates a 64b long coordinate representation.
   // latitude (as 32b) || longitude (as 32b)
-  location_key_t key() const {
-    auto const lat32b = std::bit_cast<std::uint32_t>(lat_);
-    auto const lng32b = std::bit_cast<std::uint32_t>(lng_);
+  location_key_t key() const { return latlng_.latlng_full_; }
 
-    return (static_cast<location_key_t>(lat32b) << 32) | lng32b;
+  geo::latlng to_latlng() const {
+    return {fix_to_double(latlng_.split_.lat_),
+            fix_to_double(latlng_.split_.lng_)};
   }
 
-  geo::latlng to_latlng() const { return {lat_, lng_}; }
-
-  float lat_{0.0}, lng_{0.0};
+  union {
+    struct {
+      std::uint32_t lng_;
+      std::uint32_t lat_;
+    } split_;
+    location_key_t latlng_full_;
+  } latlng_{};
 };
 
 }  // namespace transfers

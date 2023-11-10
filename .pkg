@@ -17,7 +17,7 @@
 [lmdb]
   url=git@github.com:motis-project/lmdb.git
   branch=master
-  commit=5be96596cb38c8a7919c5f543097429061c16fb6
+  commit=9bd01f14f549d8202413c4cd5f49b066b0a22b66
 [nigiri]
   url=git@github.com:motis-project/nigiri.git
   branch=master
