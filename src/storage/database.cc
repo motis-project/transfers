@@ -26,7 +26,7 @@ database::database(fs::path const& db_file_path,
   env_.set_maxdbs(5);
   env_.set_mapsize(db_max_size);
   auto flags = lmdb::env_open_flags::NOSUBDIR | lmdb::env_open_flags::NOSYNC;
-  env_.open(db_file_path.c_str(), flags);
+  env_.open(db_file_path.string().c_str(), flags);
   init();
 }
 

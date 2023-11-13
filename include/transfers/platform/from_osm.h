@@ -26,7 +26,7 @@ struct osm_platform_extractor {
   explicit osm_platform_extractor(std::filesystem::path const& osm_file_path,
                                   osmium::TagsFilter const& filter,
                                   std::vector<std::string> const& name_tags)
-      : osm_file_{osm_file_path.c_str()},
+      : osm_file_{osm_file_path.string()},
         platform_handler_(platform_handler(filter, name_tags)) {
     osmium::relations::read_relations(osm_file_, mp_manager_);
   }

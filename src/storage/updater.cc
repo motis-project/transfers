@@ -111,7 +111,7 @@ void storage_updater::generate_and_store_transfer_requests(
 void storage_updater::generate_and_store_transfer_results(
     data_request_type const request_type) {
   p::routing_graph rg;
-  ps::read_routing_graph(rg, ppr_rg_path_);
+  ps::read_routing_graph(rg, ppr_rg_path_.string());
   rg.prepare_for_routing(
       rg_config_.edge_rtree_size_, rg_config_.area_rtree_size_,
       rg_config_.lock_rtree_ ? ::ppr::rtree_options::LOCK
