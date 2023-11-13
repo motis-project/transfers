@@ -16,7 +16,8 @@ std::vector<platform>
 osm_platform_extractor::get_platforms_identified_in_osm_file() {
   osmium::index::map::FlexMem<osmium::unsigned_object_id_type, osmium::Location>
       flexmemory;
-  osmium::handler::NodeLocationsForWays<typeof(flexmemory)>
+  osmium::handler::NodeLocationsForWays<osmium::index::map::FlexMem<
+      osmium::unsigned_object_id_type, osmium::Location>>
       location_to_ways_handler{flexmemory};
 
   osmium::io::Reader reader{osm_file_, osmium::io::read_meta::no};
