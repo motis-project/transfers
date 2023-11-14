@@ -1,6 +1,31 @@
 cmake_minimum_required(VERSION 3.22)
 project(transfers)
 
+if (MSVC)
+    # PDB debug information is not supported by buildcache.
+    # Store debug info in the object files.
+    option(TRANSFERS_DEBUG_SYMBOLS "generate debug symbols (debug builds)" ON)
+    if (TRANSFERS_DEBUG_SYMBOLS)
+        set(TRANSFERS_MSVC_DEBUG_FLAGS "/Z7")
+    else()
+        set(TRANSFERS_MSVC_DEBUG_FLAGS "")
+    endif()
+    string(REPLACE "/Zi" "${TRANSFERS_MSVC_DEBUG_FLAGS}" CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
+    string(REPLACE "/Zi" "${TRANSFERS_MSVC_DEBUG_FLAGS}" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+    string(REPLACE "/Zi" "${TRANSFERS_MSVC_DEBUG_FLAGS}" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+    string(REPLACE "/Zi" "${TRANSFERS_MSVC_DEBUG_FLAGS}" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+endif()
+
+if(APPLE)
+    # prevents ar from invoking ranlib, let CMake do it
+    set(CMAKE_C_ARCHIVE_CREATE "<CMAKE_AR> Scr <TARGET> <LINK_FLAGS> <OBJECTS>")
+    set(CMAKE_CXX_ARCHIVE_CREATE "<CMAKE_AR> Scr <TARGET> <LINK_FLAGS> <OBJECTS>")
+
+    # tell ranlib to ignore empty compilation units
+    set(CMAKE_C_ARCHIVE_FINISH "<CMAKE_RANLIB> -no_warning_for_no_symbols -c <TARGET>")
+    set(CMAKE_CXX_ARCHIVE_FINISH "<CMAKE_RANLIB> -no_warning_for_no_symbols -c <TARGET>")
+endif()
+
 if (NOT DEFINED CMAKE_MSVC_RUNTIME_LIBRARY)
     if (TRANSFERS_MIMALLOC)
         set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
